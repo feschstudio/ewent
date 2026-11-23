@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.1' );
+define( 'EWENT_THEME_VERSION', '0.7.2' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -44,6 +44,9 @@ add_action( 'wp_head', function () {
 	$i = get_template_directory_uri() . '/assets/icons/';
 	echo '<meta name="theme-color" content="#F6F3E8">' . "\n";
 	echo '<link rel="icon" type="image/png" sizes="32x32" href="' . esc_url( $i . 'favicon-32.png' ) . '">' . "\n";
+	echo '<link rel="icon" type="image/png" sizes="64x64" href="' . esc_url( $i . 'favicon-64.png' ) . '">' . "\n";
+	echo '<meta property="og:image" content="' . esc_url( $i . 'og-image.png' ) . '">' . "\n";
+	echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
 	echo '<link rel="apple-touch-icon" sizes="180x180" href="' . esc_url( $i . 'apple-touch-icon.png' ) . '">' . "\n";
 	echo '<link rel="manifest" href="' . esc_url( home_url( '/ewent-manifest.json' ) ) . '">' . "\n";
 	echo '<meta name="apple-mobile-web-app-capable" content="yes">' . "\n";
