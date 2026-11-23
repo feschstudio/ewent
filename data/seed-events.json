@@ -532,5 +532,137 @@
   "price": "Gratis",
   "org": "StrandGut Rossatz-Bach – Harry's Gastrotainment",
   "desc": "Das StrandGut verwandelt den Donaustrand in Rossatzbach in ein Winterdorf. Es gibt Eisstockschießen, Glühwein und gemütliche Abende am Feuer mit Blick auf die Wachau. Am Wochenende und an Feiertagen startet der Tag mit Frühstück im StrandGut.\n\nWochentags ab 16 Uhr, Samstag, Sonntag und an Feiertagen ab 9 Uhr. Highlights: Krampuslauf am 8.12. um 17 Uhr, Silvestermenü im StrandGut am 31.12. sowie Musik und Feuerwerk am Strand um Mitternacht.\n\nKontakt: hallo@strand-gut.at, +43 676 5002903, strand-gut.at/winterdorf"
+ },
+ {
+  "title": "Schick Sisters – A Sisters Christmas",
+  "dates": [
+   [
+    "2026-12-11",
+    "19:30"
+   ]
+  ],
+  "place": "Haus der Regionen",
+  "town": "Krems-Stein",
+  "cat": "Musik",
+  "price": "ab € 16",
+  "org": "Haus der Regionen",
+  "desc": "Adventkonzert mit drei Schwestern: Weihnachtslieder, Klassiker und Coverversionen mit dichtem Dreistimmengesang."
+ },
+ {
+  "title": "„Sonst bliebe es ein Traum…“ – eine musikalische Herbergsuche",
+  "dates": [
+   [
+    "2026-12-05",
+    "18:00"
+   ],
+   [
+    "2026-12-06",
+    "16:00"
+   ],
+   [
+    "2026-12-07",
+    "18:00"
+   ],
+   [
+    "2026-12-08",
+    "16:00"
+   ]
+  ],
+  "place": "Pfarrkirche Gföhl, Kirchengasse 4",
+  "town": "Gföhl",
+  "cat": "Kultur",
+  "price": "ab € 10",
+  "org": "Pfarre Gföhl",
+  "desc": "Die Adventgeschichte aus Sicht eines Mädchens und ihrer Großmutter – musikalisch erzählt in der Pfarrkirche."
+ },
+ {
+  "title": "Flo & Wisch – Weihnachten Last Minute",
+  "dates": [
+   [
+    "2026-12-05",
+    "20:00"
+   ]
+  ],
+  "place": "Kultursaal Albrechtsberg",
+  "town": "Albrechtsberg an der Großen Krems",
+  "cat": "Kultur",
+  "price": "ab € 28",
+  "org": "Kulturwerkstatt Albrechtsberg",
+  "desc": "Kabarett-Duo mit Musik: die stressige Vorweihnachtszeit humorvoll auf die Schippe genommen."
+ },
+ {
+  "title": "FÖRTHOF UHK Krems vs. Sparkasse Schwaz Handball Tirol",
+  "dates": [
+   [
+    "2026-12-12",
+    "18:00"
+   ]
+  ],
+  "place": "Sporthalle Krems",
+  "town": "Krems",
+  "cat": "Sport",
+  "price": "ab € 15",
+  "org": "UHK Krems",
+  "desc": "Handball-Heimspiel des UHK Krems gegen die Tiroler Mannschaft aus Schwaz."
+ },
+ {
+  "title": "Unternehmerfrühstück Krems & Umgebung – Die Weihnachtsfeier",
+  "dates": [
+   [
+    "2026-12-18",
+    "18:00"
+   ]
+  ],
+  "place": "WEINSTEIN Krems",
+  "town": "Krems-Stein",
+  "cat": "Kulinarik",
+  "price": "Eintritt frei",
+  "org": "Unternehmerfrühstück Krems & Umgebung",
+  "desc": "Netzwerktreffen für Selbstständige, diesmal als Weihnachtsfeier am Abend. Speisen und Getränke vor Ort selbst bezahlen."
+ },
+ {
+  "title": "FÖRTHOF UHK Krems vs. BT Füchse",
+  "dates": [
+   [
+    "2026-12-19",
+    "19:00"
+   ]
+  ],
+  "place": "Sporthalle Krems, Rechte Kremszeile 62",
+  "town": "Krems",
+  "cat": "Sport",
+  "price": "ab € 15",
+  "org": "UHK Krems",
+  "desc": "Letztes Handball-Heimspiel des UHK Krems vor den Feiertagen."
+ },
+ {
+  "title": "Walter Kammerhofer – Amoi ois",
+  "dates": [
+   [
+    "2026-12-29",
+    "19:30"
+   ]
+  ],
+  "place": "Sport- und Veranstaltungshalle Gföhl",
+  "town": "Gföhl",
+  "cat": "Kultur",
+  "price": "",
+  "org": "Stadtgemeinde Gföhl",
+  "desc": "Best-of-Programm des Kabarettisten: von heiter bis tiefgründig, mit Selbstironie und spontanem Chaos."
+ },
+ {
+  "title": "16. Gföhler Neujahrskonzert",
+  "dates": [
+   [
+    "2027-01-03",
+    "19:00"
+   ]
+  ],
+  "place": "Sport- und Veranstaltungshalle Gföhl",
+  "town": "Gföhl",
+  "cat": "Musik",
+  "price": "ab € 19",
+  "org": "Musikverein Gföhl",
+  "desc": "Symphonische Blasmusik mit dem Musikverein Gföhl, zu Gast das Trio The Ridin Dudes mit Vintage-Sound."
  }
 ]

@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const EWENT_CATS  = array( 'Wein', 'Kulinarik', 'Musik', 'Markt', 'Kultur', 'Familie' );
+const EWENT_CATS  = array( 'Wein', 'Kulinarik', 'Musik', 'Markt', 'Kultur', 'Familie', 'Sport' );
 const EWENT_TOWNS = array( 'Krems', 'Stein', 'Dürnstein', 'Spitz', 'Weißenkirchen', 'Furth bei Göttweig', 'Langenlois', 'Gobelsburg', 'Traismauer', 'Herzogenburg' );
 const EWENT_TIERS = array( 'free' => 'Gratis', 'plus' => 'Plus', 'top' => 'Top', 'premium' => 'Premium' );
 

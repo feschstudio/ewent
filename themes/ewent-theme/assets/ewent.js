@@ -1,5 +1,5 @@
 (function(){
-  var CATS=['Wein','Kulinarik','Musik','Markt','Kultur','Familie'];
+  var CATS=['Wein','Kulinarik','Musik','Markt','Kultur','Familie','Sport'];
   var TOWNS=['Krems','Stein','Dürnstein','Spitz','Weißenkirchen','Furth bei Göttweig','Langenlois','Gobelsburg','Traismauer','Herzogenburg'];
   var PACKS=[
     {id:'free',name:'Gratis',price:0,items:[['Eintrag in der Liste',1],['Hervorgehoben in der Liste',0],['Top-Platzierung Startseite',0],['Newsletter-Erwähnung',0],['Social-Post von fesch.',0]]},
