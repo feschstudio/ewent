@@ -23,6 +23,9 @@ function ewent_settings_page() {
 	?>
 	<div class="wrap">
 		<h1>ewent. Einstellungen</h1>
+		<?php if ( isset( $_GET['matched'] ) ) : ?>
+			<div class="notice notice-success"><p><?php echo esc_html( (int) $_GET['matched'] . ' Beitragsbilder gesetzt.' ); ?></p></div>
+		<?php endif; ?>
 		<?php if ( null !== $seeded ) : ?>
 			<div class="notice notice-success"><p><?php echo esc_html( $seeded . ' Events angelegt, ' . ( isset( $_GET['skipped'] ) ? (int) $_GET['skipped'] : 0 ) . ' waren schon vorhanden.' ); ?></p></div>
 		<?php endif; ?>
@@ -44,6 +47,14 @@ function ewent_settings_page() {
 			<input type="hidden" name="action" value="ewent_seed">
 			<?php wp_nonce_field( 'ewent_seed' ); ?>
 			<?php submit_button( 'Grundbefüllung importieren', 'secondary' ); ?>
+		</form>
+		<hr>
+		<h2>Bilder zuordnen</h2>
+		<p>Setzt als Beitragsbild das Bild aus der Mediathek, dessen Titel genau dem Event-Titel entspricht. Events mit vorhandenem Beitragsbild bleiben unverändert.</p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="ewent_match_images">
+			<?php wp_nonce_field( 'ewent_match_images' ); ?>
+			<?php submit_button( 'Bilder zuordnen', 'secondary' ); ?>
 		</form>
 	</div>
 	<?php

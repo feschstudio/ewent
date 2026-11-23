@@ -57,3 +57,34 @@ add_action( 'admin_post_ewent_seed', function () {
 	wp_safe_redirect( add_query_arg( array( 'page' => 'ewent-settings', 'seeded' => $new, 'skipped' => $old ), admin_url( 'edit.php?post_type=ewent_event' ) ) );
 	exit;
 } );
+
+/** Ordnet Mediathek-Bildern (Titel = Event-Titel) das Beitragsbild zu. */
+add_action( 'admin_post_ewent_match_images', function () {
+	if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'ewent_match_images' ) ) {
+		wp_die( 'Nicht erlaubt.' );
+	}
+	$set    = 0;
+	$events = get_posts( array(
+		'post_type'      => 'ewent_event',
+		'post_status'    => 'any',
+		'posts_per_page' => -1,
+	) );
+	foreach ( $events as $e ) {
+		if ( has_post_thumbnail( $e->ID ) ) {
+			continue;
+		}
+		$att = get_posts( array(
+			'post_type'      => 'attachment',
+			'post_status'    => 'inherit',
+			'post_mime_type' => 'image',
+			'title'          => $e->post_title,
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+		) );
+		if ( $att && set_post_thumbnail( $e->ID, $att[0] ) ) {
+			$set++;
+		}
+	}
+	wp_safe_redirect( add_query_arg( array( 'page' => 'ewent-settings', 'matched' => $set ), admin_url( 'edit.php?post_type=ewent_event' ) ) );
+	exit;
+} );
