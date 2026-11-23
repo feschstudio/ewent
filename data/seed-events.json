@@ -1,0 +1,405 @@
+[
+ {
+  "title": "Kremser Adventzauber",
+  "dates": [
+   [
+    "2026-11-25",
+    "16:00"
+   ],
+   [
+    "2026-11-26",
+    "16:00"
+   ],
+   [
+    "2026-11-27",
+    "16:00"
+   ],
+   [
+    "2026-11-28",
+    "10:00"
+   ],
+   [
+    "2026-11-29",
+    "14:00"
+   ],
+   [
+    "2026-12-02",
+    "16:00"
+   ],
+   [
+    "2026-12-03",
+    "16:00"
+   ],
+   [
+    "2026-12-04",
+    "16:00"
+   ],
+   [
+    "2026-12-05",
+    "10:00"
+   ],
+   [
+    "2026-12-06",
+    "14:00"
+   ],
+   [
+    "2026-12-09",
+    "16:00"
+   ],
+   [
+    "2026-12-10",
+    "16:00"
+   ],
+   [
+    "2026-12-11",
+    "16:00"
+   ],
+   [
+    "2026-12-12",
+    "10:00"
+   ],
+   [
+    "2026-12-13",
+    "14:00"
+   ],
+   [
+    "2026-12-16",
+    "16:00"
+   ],
+   [
+    "2026-12-17",
+    "16:00"
+   ],
+   [
+    "2026-12-18",
+    "16:00"
+   ],
+   [
+    "2026-12-19",
+    "10:00"
+   ],
+   [
+    "2026-12-20",
+    "14:00"
+   ],
+   [
+    "2026-12-23",
+    "16:00"
+   ],
+   [
+    "2026-12-24",
+    "16:00"
+   ]
+  ],
+  "place": "Altstadt, Obere und Untere Landstraße",
+  "town": "Krems",
+  "cat": "Markt",
+  "price": "Gratis",
+  "org": "Kremser Adventzauber",
+  "desc": "Adventmarkt in der Kremser Altstadt, jeweils Mittwoch bis Sonntag bis 20. Dezember. Mi–Fr 16–20 Uhr, Sa 10–21 Uhr, So 14–19 Uhr. Zusätzlich am 23. und 24. Dezember ab 16 Uhr."
+ },
+ {
+  "title": "Wachauer Advent Dürnstein",
+  "dates": [
+   [
+    "2026-11-27",
+    "11:00"
+   ],
+   [
+    "2026-11-28",
+    "11:00"
+   ],
+   [
+    "2026-11-29",
+    "11:00"
+   ],
+   [
+    "2026-12-04",
+    "11:00"
+   ],
+   [
+    "2026-12-05",
+    "11:00"
+   ],
+   [
+    "2026-12-06",
+    "11:00"
+   ],
+   [
+    "2026-12-07",
+    "11:00"
+   ],
+   [
+    "2026-12-08",
+    "11:00"
+   ],
+   [
+    "2026-12-11",
+    "11:00"
+   ],
+   [
+    "2026-12-12",
+    "11:00"
+   ],
+   [
+    "2026-12-13",
+    "11:00"
+   ]
+  ],
+  "place": "Stift Dürnstein und Schiffsanlegestelle",
+  "town": "Dürnstein",
+  "cat": "Markt",
+  "price": "€ 12",
+  "org": "Wachauer Advent",
+  "desc": "Der schwimmende Adventmarkt: Stände zwischen Stift und Donauufer, dazu das Adventschiff MS Wachau. Termine: 27.–29.11., 4.–8.12. und 11.–13.12., täglich ab 11 Uhr. Kinder bis 16 Jahre frei."
+ },
+ {
+  "title": "Adventlicher Zauber in Göttweig",
+  "dates": [
+   [
+    "2026-11-28",
+    "10:00"
+   ]
+  ],
+  "place": "Benediktinerstift Göttweig",
+  "town": "Furth bei Göttweig",
+  "cat": "Markt",
+  "price": "Gratis",
+  "org": "Stift Göttweig",
+  "desc": "Adventmarkt im Stift mit Kunsthandwerk und Köstlichkeiten aus dem Kloster. Geöffnet ab 10 Uhr an neun Tagen, beginnend am 28. November."
+ },
+ {
+  "title": "Herzogenburger Stadtadvent",
+  "dates": [
+   [
+    "2026-11-27",
+    "16:00"
+   ],
+   [
+    "2026-11-28",
+    "14:00"
+   ]
+  ],
+  "place": "Rathausplatz",
+  "town": "Herzogenburg",
+  "cat": "Markt",
+  "price": "Gratis",
+  "org": "Herzogenburger Stadtadvent",
+  "desc": "Adventstimmung am Rathausplatz: am Freitag ab 16 Uhr, am Samstag ab 14 Uhr."
+ },
+ {
+  "title": "Advent im Pfadfinderheim",
+  "dates": [
+   [
+    "2026-11-28",
+    "14:00"
+   ],
+   [
+    "2026-11-29",
+    "14:00"
+   ]
+  ],
+  "place": "Pfadfinderheim, Dr.-Münch-Gasse 3",
+  "town": "Langenlois",
+  "cat": "Markt",
+  "price": "Gratis",
+  "org": "Pfadfinder Langenlois",
+  "desc": "Zwei Adventnachmittage im Pfadfinderheim, am Samstag 28. und Sonntag 29. November jeweils ab 14 Uhr."
+ },
+ {
+  "title": "Kernölamazonen: Kugel & Keks",
+  "dates": [
+   [
+    "2026-12-03",
+    "19:30"
+   ]
+  ],
+  "place": "Stadtsaal Krems",
+  "town": "Krems",
+  "cat": "Kultur",
+  "price": "ab € 32,50",
+  "org": "Kabarett & Comedy Festival Krems",
+  "desc": "Kabarett im Stadtsaal Krems, Teil des Kabarett & Comedy Festivals."
+ },
+ {
+  "title": "Advent im Feuerwehrhaus Gobelsburg",
+  "dates": [
+   [
+    "2026-12-04",
+    "16:00"
+   ],
+   [
+    "2026-12-05",
+    "16:00"
+   ],
+   [
+    "2026-12-06",
+    "16:00"
+   ]
+  ],
+  "place": "Feuerwehrhaus Gobelsburg-Zeiselberg",
+  "town": "Gobelsburg",
+  "cat": "Markt",
+  "price": "Gratis",
+  "org": "Feuerwehr Gobelsburg",
+  "desc": "Adventliches Beisammensein im Feuerwehrhaus, am 4., 5. und 6. Dezember jeweils ab 16 Uhr."
+ },
+ {
+  "title": "Weihnachtskonzert der Klasse Heinisch",
+  "dates": [
+   [
+    "2026-12-04",
+    "18:00"
+   ]
+  ],
+  "place": "Konzertsaal der Musikschule",
+  "town": "Krems",
+  "cat": "Musik",
+  "price": "Preis offen",
+  "org": "Musikschule Krems",
+  "desc": "Die Klasse von Mag. Karin Heinisch lädt zum Weihnachtskonzert in den Konzertsaal der Musikschule."
+ },
+ {
+  "title": "Traismaurer Advent",
+  "dates": [
+   [
+    "2026-12-05",
+    "10:00"
+   ],
+   [
+    "2026-12-06",
+    "10:00"
+   ]
+  ],
+  "place": "Schloss Traismauer",
+  "town": "Traismauer",
+  "cat": "Markt",
+  "price": "Gratis",
+  "org": "Schloss Traismauer",
+  "desc": "Adventmarkt im Schloss Traismauer, am Samstag und Sonntag jeweils ab 10 Uhr."
+ },
+ {
+  "title": "Adventkonzert der Trachtenkapelle Spitz",
+  "dates": [
+   [
+    "2026-12-08",
+    "18:00"
+   ]
+  ],
+  "place": "Pfarrkirche Spitz",
+  "town": "Spitz",
+  "cat": "Musik",
+  "price": "Preis offen",
+  "org": "Trachtenkapelle Spitz",
+  "desc": "Die Trachtenkapelle Spitz spielt ihr Adventkonzert in der Pfarrkirche."
+ },
+ {
+  "title": "Advent.Markt an der Gartenbauschule",
+  "dates": [
+   [
+    "2026-12-11",
+    "14:00"
+   ]
+  ],
+  "place": "Innenhof der Gartenbauschule",
+  "town": "Langenlois",
+  "cat": "Markt",
+  "price": "Gratis",
+  "org": "Gartenbauschule Langenlois",
+  "desc": "Weihnachtlicher Markt im Innenhof der Gartenbauschule, ab 14 Uhr."
+ },
+ {
+  "title": "Astrid Wirtenberger live",
+  "dates": [
+   [
+    "2026-12-11",
+    "19:30"
+   ]
+  ],
+  "place": "Stadtsaal Krems",
+  "town": "Krems",
+  "cat": "Musik",
+  "price": "Preis offen",
+  "org": "Stadtsaal Krems",
+  "desc": "Astrid Wirtenberger gastiert mit ihrer Musik im Stadtsaal Krems."
+ },
+ {
+  "title": "Adventstimmung in der Langen Sonne",
+  "dates": [
+   [
+    "2026-12-13",
+    "17:00"
+   ]
+  ],
+  "place": "Bürogemeinschaft, Am Südblick 7",
+  "town": "Langenlois",
+  "cat": "Markt",
+  "price": "Gratis",
+  "org": "Lange Sonne Langenlois",
+  "desc": "Adventstimmung am dritten Adventsonntag, Beginn um 17 Uhr."
+ },
+ {
+  "title": "Glenn Miller Orchestra",
+  "dates": [
+   [
+    "2026-12-16",
+    "20:00"
+   ]
+  ],
+  "place": "Stadtsaal Krems",
+  "town": "Krems",
+  "cat": "Musik",
+  "price": "Preis offen",
+  "org": "Stadtsaal Krems",
+  "desc": "Das weltbekannte Swing-Orchester gastiert im Stadtsaal Krems."
+ },
+ {
+  "title": "Adventkonzert mit Erwin Belakowitsch",
+  "dates": [
+   [
+    "2026-12-20",
+    "16:00"
+   ]
+  ],
+  "place": "Nikolauskirche",
+  "town": "Langenlois",
+  "cat": "Musik",
+  "price": "Preis offen",
+  "org": "Nikolauskirche Langenlois",
+  "desc": "Adventkonzert in der Nikolauskirche Langenlois."
+ },
+ {
+  "title": "Adventausklang im Schlosshof",
+  "dates": [
+   [
+    "2026-12-20",
+    "16:00"
+   ]
+  ],
+  "place": "Hotel Schloss Haindorf, Krumpöck-Allee 21",
+  "town": "Langenlois",
+  "cat": "Kulinarik",
+  "price": "Preis offen",
+  "org": "Hotel Schloss Haindorf",
+  "desc": "Kulinarischer Ausklang des Advents im Schlosshof des Hotels Schloss Haindorf."
+ },
+ {
+  "title": "Weihnachtliches Bläserspiel",
+  "dates": [
+   [
+    "2026-12-24",
+    "16:15"
+   ],
+   [
+    "2026-12-31",
+    "16:15"
+   ]
+  ],
+  "place": "Friedhof Krems, Friedhof Stein, Piaristenturm",
+  "town": "Krems",
+  "cat": "Musik",
+  "price": "Preis offen",
+  "org": "Stadt Krems",
+  "desc": "Weihnachtliche Bläserklänge an drei Orten in Krems und Stein, wiederholt am 31. Dezember um 16:15 Uhr."
+ }
+]
