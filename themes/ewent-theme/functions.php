@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.1.0' );
+define( 'EWENT_THEME_VERSION', '0.5.0' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -118,4 +118,21 @@ add_filter( 'template_include', function ( $t ) {
 		return get_template_directory() . '/front-page.php';
 	}
 	return $t;
+} );
+
+/** Rechtstexte bei neuer Theme-Version aus inc/legal.json in die Seiten übernehmen. */
+add_action( 'init', function () {
+	if ( get_option( 'ewent_legal_ver' ) === EWENT_THEME_VERSION ) {
+		return;
+	}
+	$file = get_template_directory() . '/inc/legal.json';
+	if ( file_exists( $file ) ) {
+		foreach ( (array) json_decode( file_get_contents( $file ), true ) as $slug => $pg ) {
+			$page = get_page_by_path( $slug );
+			if ( $page ) {
+				wp_update_post( array( 'ID' => $page->ID, 'post_title' => $pg['title'], 'post_content' => $pg['html'] . ( false !== strpos( $pg['html'], '[' ) ? '<p><em>Entwurf. Angaben in [eckigen Klammern] müssen noch ergänzt und die Texte rechtlich geprüft werden.</em></p>' : '' ) ) );
+			}
+		}
+	}
+	update_option( 'ewent_legal_ver', EWENT_THEME_VERSION );
 } );
