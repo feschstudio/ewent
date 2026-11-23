@@ -71,6 +71,21 @@ $tiers = array( 'free' => 'Gratis', 'plus' => 'Plus', 'top' => 'Top', 'premium' 
 					<label style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;font-weight:400"><input type="checkbox" name="rights" value="1" style="margin-top:4px"> <span>Ich habe die Rechte an diesem Foto und erlaube ewent., es zur Bewerbung dieses Events zu zeigen.</span></label>
 				</div>
 				<div class="nav" style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn accent" type="submit">Speichern</button><?php if ( 'publish' === $ev->post_status ) : ?><a class="btn ghost" href="<?php echo esc_url( get_permalink( $id ) ); ?>">Event ansehen</a><?php endif; ?></div>
+				<?php if ( function_exists( 'ewent_shop_active' ) && ewent_shop_active() ) :
+					$names = array( 'plus' => 'Plus', 'top' => 'Top', 'premium' => 'Premium' );
+					$pr    = ewent_pack_prices();
+					$offer = array();
+					foreach ( $names as $k => $nm ) {
+						if ( ewent_pack_rank( $k ) > ewent_pack_rank( $tier ) ) {
+							$offer[ $k ] = $nm . ' · € ' . max( 0, $pr[ $k ] - $pr[ $tier ] );
+						}
+					}
+					if ( $offer ) : ?>
+					<div style="margin:22px 0 0;padding:16px;border:1.5px dashed var(--line);border-radius:var(--r-sm)"><b>Mehr Sichtbarkeit</b>
+						<p class="note" style="margin:6px 0 12px">Paket pro Event, inkl. 20 % USt. Bei einem Upgrade zahlst du nur die Differenz.</p>
+						<div style="display:flex;gap:8px;flex-wrap:wrap"><?php foreach ( $offer as $k => $label ) : ?><a class="btn ghost" href="<?php echo esc_url( add_query_arg( array( 'ewent_buy' => $k, 'event' => $id, '_wpnonce' => wp_create_nonce( 'ewent_buy_' . $id ) ), ewent_account_url() ) ); ?>"><?php echo esc_html( $label ); ?></a><?php endforeach; ?></div>
+					</div>
+				<?php endif; endif; ?>
 			</form>
 		</details>
 	<?php endforeach; ?>
