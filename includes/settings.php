@@ -56,6 +56,25 @@ function ewent_settings_page() {
 			<?php wp_nonce_field( 'ewent_match_images' ); ?>
 			<?php submit_button( 'Bilder zuordnen', 'secondary' ); ?>
 		</form>
+		<hr>
+		<h2>E-Mail testen</h2>
+		<?php
+		$t = isset( $_GET['mailtest'] ) ? get_transient( 'ewent_mail_test_' . get_current_user_id() ) : false;
+		if ( $t ) {
+			if ( $t['ok'] ) {
+				echo '<div class="notice notice-success inline"><p>Mail an ' . esc_html( $t['to'] ) . ' wurde an den Mailserver übergeben (Absender ' . esc_html( $t['from'] ) . '). Schau in Posteingang und Spam. Ob sie wirklich ankommt, zeigt nur das Postfach.</p></div>';
+			} else {
+				echo '<div class="notice notice-error inline"><p>Versand fehlgeschlagen' . ( $t['err'] ? ': ' . esc_html( $t['err'] ) : '.' ) . '</p></div>';
+			}
+		}
+		?>
+		<p>Schickt eine Test-Mail, damit du siehst, ob Login-Links und Benachrichtigungen ankommen.</p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="ewent_test_mail">
+			<?php wp_nonce_field( 'ewent_test_mail' ); ?>
+			<input type="email" name="to" class="regular-text" placeholder="deine@mail.at" value="<?php echo esc_attr( ewent_notify_email() ); ?>" required>
+			<?php submit_button( 'Test-Mail senden', 'secondary', 'submit', false ); ?>
+		</form>
 	</div>
 	<?php
 }
