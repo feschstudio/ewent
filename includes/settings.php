@@ -42,7 +42,7 @@ function ewent_settings_page() {
 		</form>
 		<hr>
 		<h2>Grundbefüllung</h2>
-		<p>Legt die 17 manuell recherchierten Events (Adventzeit 2026) an. Bereits vorhandene Titel werden übersprungen.</p>
+		<p>Legt die 18 manuell recherchierten Events (Adventzeit 2026) an. Bereits vorhandene Titel werden übersprungen.</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="ewent_seed">
 			<?php wp_nonce_field( 'ewent_seed' ); ?>
