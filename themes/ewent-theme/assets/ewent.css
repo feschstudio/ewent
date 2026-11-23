@@ -463,3 +463,17 @@ select.in,textarea.in{width:100%;font:inherit}
 .konto details summary::-webkit-details-marker{display:none}
 .konto .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:520px){.konto .two{grid-template-columns:1fr}}
+
+/* Footer Desktop */
+@media(min-width:900px){
+  footer{padding:56px 0 40px;margin-top:96px}
+  .foot{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,.6fr);column-gap:72px;row-gap:0;grid-template-areas:"brand menu legal" "tagl menu legal" "demo menu legal";align-items:start}
+  .foot .wm{font-size:46px}
+  .by{margin-top:0;gap:8px;font-size:15px}
+  .by .logo-img{height:24px}
+  .foot .tagl{margin:24px 0 0;font-size:15px;line-height:1.7}
+  .foot .fmenu{max-width:440px;border-top:0}
+  .foot .fmenu>a:first-child,.foot .fmenu>button:first-child{border-top:0;padding-top:0}
+  .foot .hs{border-top:1px solid var(--line)}
+  .foot .legal{flex-direction:column;gap:14px;align-items:flex-start;justify-self:start;font-size:15px;padding-top:2px}
+}
