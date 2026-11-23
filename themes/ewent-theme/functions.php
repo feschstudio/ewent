@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.0' );
+define( 'EWENT_THEME_VERSION', '0.7.1' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -41,7 +41,40 @@ function ewent_theme_data() {
 }
 
 add_action( 'wp_head', function () {
+	$i = get_template_directory_uri() . '/assets/icons/';
 	echo '<meta name="theme-color" content="#F6F3E8">' . "\n";
+	echo '<link rel="icon" type="image/png" sizes="32x32" href="' . esc_url( $i . 'favicon-32.png' ) . '">' . "\n";
+	echo '<link rel="apple-touch-icon" sizes="180x180" href="' . esc_url( $i . 'apple-touch-icon.png' ) . '">' . "\n";
+	echo '<link rel="manifest" href="' . esc_url( home_url( '/ewent-manifest.json' ) ) . '">' . "\n";
+	echo '<meta name="apple-mobile-web-app-capable" content="yes">' . "\n";
+	echo '<meta name="apple-mobile-web-app-title" content="ewent.">' . "\n";
+}, 1 );
+
+/** Web-App-Manifest unter /ewent-manifest.json (ohne Rewrite-Regeln). */
+add_action( 'init', function () {
+	$path = wp_parse_url( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '', PHP_URL_PATH );
+	if ( ! $path || substr( $path, -19 ) !== '/ewent-manifest.json' ) {
+		return;
+	}
+	$i = get_template_directory_uri() . '/assets/icons/';
+	header( 'Content-Type: application/manifest+json; charset=utf-8' );
+	echo wp_json_encode( array(
+		'name'             => 'ewent.',
+		'short_name'       => 'ewent.',
+		'description'      => 'Veranstaltungen in der Region Krems',
+		'start_url'        => home_url( '/' ),
+		'scope'            => home_url( '/' ),
+		'display'          => 'standalone',
+		'background_color' => '#F6F3E8',
+		'theme_color'      => '#F6F3E8',
+		'lang'             => 'de-AT',
+		'icons'            => array(
+			array( 'src' => $i . 'icon-192.png', 'sizes' => '192x192', 'type' => 'image/png', 'purpose' => 'any' ),
+			array( 'src' => $i . 'icon-512.png', 'sizes' => '512x512', 'type' => 'image/png', 'purpose' => 'any' ),
+			array( 'src' => $i . 'icon-512-maskable.png', 'sizes' => '512x512', 'type' => 'image/png', 'purpose' => 'maskable' ),
+		),
+	), JSON_UNESCAPED_SLASHES );
+	exit;
 } );
 
 /** Pfad zu einer rechtlichen Seite (oder #), falls vorhanden. */
