@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.5.0' );
+define( 'EWENT_THEME_VERSION', '0.6.1' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -110,6 +110,9 @@ add_action( 'admin_menu', function () {
 
 /** Startseite, Events-Archiv oder eine Seite mit dem Slug "events" zeigen die volle Event-Ansicht. */
 function ewent_is_home() {
+	if ( get_query_var( 'ewent_konto' ) ) {
+		return false;
+	}
 	return is_front_page() || is_post_type_archive( 'ewent_event' ) || is_page( 'events' );
 }
 

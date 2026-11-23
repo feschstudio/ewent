@@ -46,7 +46,7 @@ function ewent_occurrences( $args = array() ) {
 			}
 			$out[] = array(
 				'id'      => $p->ID,
-				'title'   => get_the_title( $p ),
+				'title'   => html_entity_decode( get_the_title( $p ), ENT_QUOTES, 'UTF-8' ),
 				'url'     => get_permalink( $p ),
 				'date'    => $d[0],
 				'time'    => $d[1],
