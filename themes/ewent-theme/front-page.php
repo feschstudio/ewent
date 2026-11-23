@@ -18,7 +18,7 @@
 </div>
 
 <main class="wrap">
-  <div id="weekBox"></div><div id="featuredBox"></div>
+  <div id="weekBox"></div><div id="featuredBox"></div><div id="longBox"></div>
   <div id="list"><noscript><?php
 	if ( function_exists( 'ewent_occurrences' ) ) {
 		echo '<ul>';
