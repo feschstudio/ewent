@@ -453,7 +453,7 @@ select.ain{width:92px}
 .lg.page p{margin:0 0 8px;color:var(--muted)}
 .evpage .pic{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;background:var(--accent-soft);margin-bottom:22px}
 .evpage h1{font-size:clamp(30px,7vw,46px);margin:8px 0 14px}
-.evpage .back{display:inline-block;margin-bottom:18px;color:var(--muted);text-decoration:none;font-size:14px}
+.evpage .back{display:block;margin-bottom:18px;color:var(--muted);text-decoration:none;font-size:14px}
 .evpage .desc{white-space:pre-line;margin-bottom:22px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .wkpic img{width:100%;height:100%;object-fit:cover;display:block}
