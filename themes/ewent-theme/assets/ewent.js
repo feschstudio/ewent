@@ -171,7 +171,8 @@
     var fe=(parts.length?[]:all.filter(function(e){return e.tier==='top'||e.tier==='premium'}).filter(function(e,i,a){return a.findIndex(function(x){return x.title===e.title})===i}).slice(0,3));
     $('#featuredBox').innerHTML=fe.length?'<div class="section-head"><h2>Highlights</h2><span class="label">Wischen</span></div><div class="snap">'+fe.map(card).join('')+'</div>':'';
     var lb=$('#longBox');
-    if(lb)lb.innerHTML=showRow&&lg.length?'<div class="section-head" style="margin-top:'+(fe.length?46:0)+'px"><h2>Mehrtägig und laufend</h2><span class="label">'+lg.length+(lg.length===1?' Event':' Events')+'</span></div><div class="snap sm">'+lg.map(lcard).join('')+'</div>':'';
+    if(lb)lb.innerHTML=showRow&&lg.length?'<div class="section-head" style="margin-top:'+(fe.length?46:0)+'px"><h2>Mehrtägig und laufend</h2><span class="label">'+lg.length+(lg.length===1?' Event':' Events')+'</span></div><div class="snapwrap"><button type="button" class="snapnav prev" aria-label="Zurück" hidden>‹</button><div class="snap sm">'+lg.map(lcard).join('')+'</div><button type="button" class="snapnav next" aria-label="Weiter">›</button></div>':'';
+    if(lb){var sw=lb.querySelector('.snapwrap');if(sw){var sn=sw.querySelector('.snap'),pv=sw.querySelector('.prev'),nx=sw.querySelector('.next');var upd=function(){pv.hidden=sn.scrollLeft<8;nx.hidden=sn.scrollLeft+sn.clientWidth>=sn.scrollWidth-8};pv.onclick=function(){sn.scrollBy({left:-sn.clientWidth*.8,behavior:'smooth'})};nx.onclick=function(){sn.scrollBy({left:sn.clientWidth*.8,behavior:'smooth'})};sn.addEventListener('scroll',upd,{passive:true});setTimeout(upd,50)}}
     var wk=$('#weekBox');
     if(!parts.length){
       var picks=[['Jazz im Weinkeller','Kleiner Keller, großer Sound. Ideal für einen Abend zu zweit.'],['Weinwanderung im Dezember','Zwei Stunden durch die Terrassen, vier Stationen mit Verkostung.'],['Plätzchen backen für alle','Offene Backstube, perfekt für Familien am Nachmittag.']];

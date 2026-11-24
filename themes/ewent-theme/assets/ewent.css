@@ -489,3 +489,28 @@ select.in,textarea.in{width:100%;font:inherit}
 .snap.sm .chipdate,.snap.sm .chipbadge{font-size:11px;padding:3px 8px}
 @media(min-width:640px){.snap.sm .ev{width:230px}}
 @media(min-width:1024px){.snap.sm{grid-template-columns:repeat(4,1fr);gap:18px}.snap.sm .ev{width:auto;max-width:none}}
+
+/* Mehrtägig: Slider mit Pfeilen */
+.snapwrap{position:relative}
+.snapnav{display:none}
+@media(min-width:1024px){
+  .snap.sm{display:flex;grid-template-columns:none;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth}
+  .snap.sm .ev{flex:none;width:calc((100% - 54px)/4);max-width:none;scroll-snap-align:start}
+  .snapnav{display:flex;align-items:center;justify-content:center;position:absolute;top:calc(50% - 48px);z-index:3;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:26px;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(30,42,34,.14)}
+  .snapnav[hidden]{display:none}
+  .snapnav:hover{background:var(--ink);color:var(--paper)}
+  .snapnav.prev{left:-22px}.snapnav.next{right:-22px}
+
+  /* Liste wie mobil: eine Spalte, kompakte Zeilen, Tagesüberschriften */
+  #list{display:block;max-width:860px;margin-left:auto;margin-right:auto}
+  .dgrp{display:block}
+  .dgrp .day{display:block}
+  .list.cols{display:grid;grid-template-columns:1fr}
+  .list .ev{display:grid;grid-template-columns:112px 1fr;gap:14px;align-items:center;padding:8px}
+  .list .ev .pic{aspect-ratio:1;border-radius:20px}
+  .list .ev .chipdate{display:none}
+  .list .ev .chipbadge,.list .ev.hl .chipbadge{display:block;left:6px;right:auto;top:6px;padding:4px 8px;font-size:9px;letter-spacing:.08em}
+  .list .ev.hl .chipbadge{display:none}
+  .list .ev .txt{padding:0 6px 0 0}
+  .list .ev h3{font-size:18px;margin:0 0 4px}
+}
