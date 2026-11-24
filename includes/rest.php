@@ -61,9 +61,6 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	if ( ! empty( $p['website'] ) ) {
 		return rest_ensure_response( array( 'ok' => true ) );
 	}
-	if ( ewent_rate_limited( 'submit', 5 ) ) {
-		return new WP_Error( 'ewent_rate', 'Zu viele Einreichungen. Bitte versuch es später nochmal.', array( 'status' => 429 ) );
-	}
 	$title = sanitize_text_field( $p['title'] ?? '' );
 	$date  = sanitize_text_field( $p['date'] ?? '' );
 	$time  = sanitize_text_field( $p['time'] ?? '' );
@@ -86,6 +83,9 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	}
 	if ( ! ewent_valid_submitted_image( $p['img'] ?? '' ) ) {
 		return new WP_Error( 'ewent_img', 'Bitte lade ein Titelbild hoch (JPG, PNG oder WebP, max. 4 MB).', array( 'status' => 400 ) );
+	}
+	if ( ewent_rate_limited( 'submit', 10 ) ) {
+		return new WP_Error( 'ewent_rate', 'Zu viele Einreichungen. Bitte versuch es später nochmal.', array( 'status' => 429 ) );
 	}
 	$id = wp_insert_post( array(
 		'post_type'    => 'ewent_event',
