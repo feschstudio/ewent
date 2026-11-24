@@ -226,9 +226,8 @@
   /* Region */
   $('#regionBtn').onclick=function(){
     $('#regionSheet').innerHTML='<div class="pad"><div class="sheet-top"><h2 style="margin:0">Region</h2><button class="x" id="rx" aria-label="Schließen">×</button></div>'+
-      '<p class="note">Jede Region bekommt später ihre eigene Event-Seite auf derselben Plattform.</p>'+
       '<div class="rlist"><button class="ritem on"><span><b>Region Krems</b><small>Krems | Wachau, Kremstal, Kamptal, Traisental</small></span><span class="badge">Aktiv</span></button>'+
-      '<button class="ritem" disabled><span><b>Weitere Regionen</b><small>Folgen</small></span><span class="label">Bald</span></button></div>'+
+      '</div>'+
       '<button class="btn ghost block" id="rc">Schließen</button></div>';
     $('#rx').onclick=$('#rc').onclick=function(){closeScrim('#regionScrim')};
     openScrim('#regionScrim');
@@ -309,7 +308,7 @@
       h=head('Mehr Details','Beschreibung, Preis, Link und ein Bild.')+
       '<div class="field"><label for="f_desc">Beschreibung</label><textarea class="in" id="f_desc" placeholder="Was erwartet die Gäste?">'+esc(form.desc)+'</textarea></div>'+
       '<div class="field"><label for="f_price">Eintritt</label><div class="pricebox"><span>€</span><input class="in pin" id="f_price" inputmode="decimal" autocomplete="off" value="'+pVal(form.price)+'" placeholder="0,00"></div><small class="hint">Leer lassen oder 0 = Eintritt frei.</small></div></div>'+(form.pack!=='free'?'<div class="field"><label for="f_link">Ticket-/Anmelde-Link</label><input class="in" id="f_link" inputmode="url" value="'+esc(form.link)+'" placeholder="https://"></div>':'<div class="field"><label>Ticket-/Anmelde-Link</label><div class="lockfield">Ab Plus-Paket. Du wählst es im letzten Schritt.</div></div>')+
-      '<div class="field"><label for="f_img">Titelbild (nur Foto)</label><input class="in" id="f_img" type="file" accept="image/*" style="padding-top:15px"><small class="hint">Bitte ein Foto von Ort, Essen oder Stimmung. Keine Flyer oder Plakate.</small></div><div class="field"><label for="f_credit">Bildnachweis (Foto von)</label><input class="in" id="f_credit" value="'+esc(form.credit)+'" placeholder="Name der Fotografin / des Fotografen"><small class="hint">Leer = wir schreiben den Veranstalter hin. Mit dem Einreichen bestätigst du, dass du die Rechte am Bild hast.</small></div>'+(form.ai?'<div class="fnote"><b>Dein Flyer ist gespeichert.</b> Er erscheint extra auf der Event-Seite.</div>':'')+
+      '<div class="field"><label>Titelbild</label><div class="lockfield">Schick uns ein Foto (Ort, Essen oder Stimmung, kein Flyer) an info@ewent.at oder als Antwort auf die Freigabe-Mail.</div></div><div class="field"><label for="f_credit">Bildnachweis (Foto von)</label><input class="in" id="f_credit" value="'+esc(form.credit)+'" placeholder="Name der Fotografin / des Fotografen"><small class="hint">Leer = wir schreiben den Veranstalter hin. Mit dem Einreichen bestätigst du, dass du die Rechte am Bild hast.</small></div>'+(form.ai?'<div class="fnote"><b>Dein Flyer ist gespeichert.</b> Er erscheint extra auf der Event-Seite.</div>':'')+
       '<div class="nav"><button class="btn ghost" id="back">Zurück</button><button class="btn" id="next">Weiter</button></div>';
     }else if(step===3){
       h=head('Wer lädt ein?','Für Rückfragen. Deine Adresse wird nicht veröffentlicht.')+
