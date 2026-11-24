@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.8' );
+define( 'EWENT_THEME_VERSION', '0.7.9' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -174,4 +174,16 @@ add_action( 'init', function () {
 		}
 	}
 	update_option( 'ewent_legal_ver', EWENT_THEME_VERSION );
+} );
+
+
+/** Haftung für Inhalte und Bildrechte: wird an Impressum und AGB angehängt (auch bei schon bestehenden Seiten). */
+add_filter( 'the_content', function ( $c ) {
+	if ( ! is_page( array( 'impressum', 'agb' ) ) || false !== strpos( $c, 'ewent-haftung' ) ) {
+		return $c;
+	}
+	return $c . '<div class="ewent-haftung"><h4>Haftung für Inhalte und Bildrechte</h4>'
+		. '<p>Die Veranstaltungen, Texte und Bilder auf ewent. werden von den Veranstaltern selbst eingetragen oder von uns in ihrem Namen übernommen. Für Inhalt, Richtigkeit, Aktualität und Vollständigkeit der Angaben sowie für die Rechte an Texten und Bildern sind ausschließlich die jeweiligen Veranstalter verantwortlich, nicht der Betreiber der Website.</p>'
+		. '<p>Bildnachweis: Ist beim Event kein Urheber angegeben, wird der Veranstalter als Bildquelle genannt. Wer eine Rechtsverletzung vermutet, schreibt bitte an <a href="mailto:info@ewent.at">info@ewent.at</a>. Wir prüfen den Hinweis und entfernen Inhalte, wenn nötig, rasch.</p>'
+		. '<p>Für Inhalte externer Seiten (z. B. Ticket-Links) sind allein deren Betreiber verantwortlich.</p></div>';
 } );

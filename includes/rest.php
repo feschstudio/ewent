@@ -100,6 +100,7 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	update_post_meta( $id, '_ew_town', sanitize_text_field( $p['town'] ?? '' ) );
 	update_post_meta( $id, '_ew_price', sanitize_text_field( $p['price'] ?? 'Gratis' ) ?: 'Gratis' );
 	update_post_meta( $id, '_ew_org', sanitize_text_field( $p['org'] ?? '' ) );
+	update_post_meta( $id, '_ew_credit', sanitize_text_field( $p['credit'] ?? '' ) );
 	update_post_meta( $id, '_ew_tier', 'free' );
 	update_post_meta( $id, '_ew_link', esc_url_raw( $p['link'] ?? '' ) );
 	update_post_meta( $id, '_ew_owner_tel', sanitize_text_field( $p['tel'] ?? '' ) );

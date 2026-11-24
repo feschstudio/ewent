@@ -58,7 +58,7 @@ $tiers = array( 'free' => 'Gratis', 'plus' => 'Plus', 'top' => 'Top', 'premium' 
 				<div class="two"><div class="field"><label>Ort</label><select class="in" name="town"><?php foreach ( EWENT_TOWNS as $t ) { echo '<option' . selected( $m( '_ew_town' ), $t, false ) . '>' . esc_html( $t ) . '</option>'; } ?></select></div>
 				<div class="field"><label>Kategorie</label><select class="in" name="cat"><?php foreach ( EWENT_CATS as $c ) { echo '<option' . selected( $m( '_ew_cat' ), $c, false ) . '>' . esc_html( $c ) . '</option>'; } ?></select></div></div>
 				<div class="two"><div class="field"><label>Preis (z. B. Gratis oder € 12)</label><input class="in" name="price" value="<?php echo esc_attr( $m( '_ew_price' ) ); ?>"></div>
-				<div class="field"><label>Veranstalter</label><input class="in" name="org" value="<?php echo esc_attr( $m( '_ew_org' ) ); ?>"></div></div>
+				<div class="field"><label>Veranstalter</label><input class="in" name="org" value="<?php echo esc_attr( $m( '_ew_org' ) ); ?>"></div><div class="field"><label>Bildnachweis (Foto von)</label><input class="in" name="credit" value="<?php echo esc_attr( $m( '_ew_credit' ) ); ?>" placeholder="leer = Veranstalter"></div></div>
 				<div class="field"><label>Beschreibung</label><textarea class="in" name="desc" rows="5"><?php echo esc_textarea( $ev->post_content ); ?></textarea></div>
 				<?php if ( 'free' !== $tier ) : ?>
 					<div class="field"><label>Ticket-/Anmelde-Link</label><input class="in" name="link" inputmode="url" value="<?php echo esc_attr( $m( '_ew_link' ) ); ?>" placeholder="https://"></div>

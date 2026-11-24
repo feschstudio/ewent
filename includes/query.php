@@ -60,6 +60,7 @@ function ewent_occurrences( $args = array() ) {
 				'price'   => $pr,
 				'tier'    => (string) ( get_post_meta( $p->ID, '_ew_tier', true ) ?: 'free' ),
 				'org'     => (string) get_post_meta( $p->ID, '_ew_org', true ),
+				'credit'  => (string) get_post_meta( $p->ID, '_ew_credit', true ),
 				'manual'  => '1' === get_post_meta( $p->ID, '_ew_manual', true ),
 				'excerpt' => wp_strip_all_tags( $p->post_content ),
 				'image'   => get_the_post_thumbnail_url( $p, 'large' ) ?: '',

@@ -172,6 +172,7 @@ function ewent_account_save() {
 	update_post_meta( $id, '_ew_place', sanitize_text_field( $g( 'place' ) ) );
 	update_post_meta( $id, '_ew_price', sanitize_text_field( $g( 'price' ) ) ?: 'Gratis' );
 	update_post_meta( $id, '_ew_org', sanitize_text_field( $g( 'org' ) ) );
+	update_post_meta( $id, '_ew_credit', sanitize_text_field( $g( 'credit' ) ) );
 	$tier = (string) ( get_post_meta( $id, '_ew_tier', true ) ?: 'free' );
 	if ( 'free' !== $tier ) {
 		update_post_meta( $id, '_ew_link', esc_url_raw( $g( 'link' ) ) );

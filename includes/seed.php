@@ -42,6 +42,9 @@ function ewent_run_seed() {
 		update_post_meta( $id, '_ew_cat', $r['cat'] );
 		update_post_meta( $id, '_ew_price', $r['price'] );
 		update_post_meta( $id, '_ew_org', $r['org'] );
+		if ( ! empty( $r['credit'] ) ) {
+			update_post_meta( $id, '_ew_credit', $r['credit'] );
+		}
 		update_post_meta( $id, '_ew_tier', 'free' );
 		update_post_meta( $id, '_ew_manual', '1' );
 		$new++;

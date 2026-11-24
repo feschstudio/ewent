@@ -72,6 +72,7 @@ function ewent_render_metabox( $post ) {
 		</div>
 		<div><label for="ew_price">Eintritt (Text, z. B. Gratis, € 12, ab € 32,50)</label><input id="ew_price" name="ew_price" value="<?php echo esc_attr( $g( '_ew_price', 'Gratis' ) ); ?>"></div>
 		<div><label for="ew_org">Veranstalter</label><input id="ew_org" name="ew_org" value="<?php echo esc_attr( $g( '_ew_org' ) ); ?>"></div>
+		<div><label for="ew_credit">Bildnachweis (Foto von; leer = Veranstalter)</label><input id="ew_credit" name="ew_credit" value="<?php echo esc_attr( $g( '_ew_credit' ) ); ?>"></div>
 		<div><label for="ew_link">Ticket-/Anmelde-Link</label><input id="ew_link" name="ew_link" type="url" value="<?php echo esc_attr( $g( '_ew_link' ) ); ?>"></div>
 		<div><label for="ew_tier">Paket</label>
 			<select id="ew_tier" name="ew_tier"><?php foreach ( EWENT_TIERS as $k => $v ) { echo '<option value="' . esc_attr( $k ) . '"' . selected( $tier, $k, false ) . '>' . esc_html( $v ) . '</option>'; } ?></select>
@@ -102,6 +103,7 @@ add_action( 'save_post_ewent_event', function ( $post_id ) {
 	update_post_meta( $post_id, '_ew_cat', in_array( $cat, EWENT_CATS, true ) ? $cat : 'Kultur' );
 	update_post_meta( $post_id, '_ew_price', sanitize_text_field( $p( 'ew_price' ) ) );
 	update_post_meta( $post_id, '_ew_org', sanitize_text_field( $p( 'ew_org' ) ) );
+	update_post_meta( $post_id, '_ew_credit', sanitize_text_field( $p( 'ew_credit' ) ) );
 	update_post_meta( $post_id, '_ew_link', esc_url_raw( $p( 'ew_link' ) ) );
 	$tier = sanitize_key( $p( 'ew_tier' ) );
 	update_post_meta( $post_id, '_ew_tier', isset( EWENT_TIERS[ $tier ] ) ? $tier : 'free' );
