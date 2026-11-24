@@ -253,9 +253,9 @@
 
   function ics(e){var p=function(n){return (n<10?'0':'')+n},h=e.t.split(':'),ymd=e.date.getFullYear()+p(e.date.getMonth()+1)+p(e.date.getDate()),st=ymd+'T'+h[0]+h[1]+'00',en=ymd+'T'+p((+h[0]+2)%24)+h[1]+'00';return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ewent.//DE','BEGIN:VEVENT','UID:'+e.i+'@ewent.','DTSTAMP:'+st,'DTSTART:'+st,'DTEND:'+en,'SUMMARY:'+e.title,'LOCATION:'+e.place+', '+e.town,'DESCRIPTION:'+e.desc,'END:VEVENT','END:VCALENDAR'].join('\r\n')}
   function packHTML(p){
-    return '<div class="pack'+(p.hot?' hot':'')+'"><div class="row"><h3>'+p.name+'</h3>'+(p.hot?'<span class="badge">Beliebt</span>':'')+'</div>'+
+    return '<div class="pack'+(p.hot?' hot':'')+(p.price?' soon':'')+'"><div class="row"><h3>'+p.name+'</h3>'+(p.hot?'<span class="badge">Beliebt</span>':'')+'</div>'+
       '<div class="price">€ '+p.price+' <small>pro Event</small></div><ul>'+p.items.map(function(i){return '<li'+(i[1]?'':' class="off"')+'>'+i[0].replace('fesch.','ewent.')+'</li>'}).join('')+'</ul>'+
-      '<button class="btn '+(p.hot?'accent':'ghost')+' block" data-pack="'+p.id+'">'+(p.price?p.name+' wählen':'Gratis eintragen')+'</button></div>';
+      (p.price?'<button class="btn ghost block" disabled>Demnächst verfügbar</button>':'<button class="btn '+(p.hot?'accent':'ghost')+' block" data-pack="'+p.id+'">Gratis eintragen</button>')+'</div>';
   }
   $('#packGrid').innerHTML=PACKS.map(packHTML).join('');
 
@@ -270,7 +270,7 @@
       '<div class="tool"><div class="qr">'+qr(slug)+'</div><div><b>QR-Code</b><small>Für Plakat, Flyer und Aushang</small><button class="mini" type="button">Als PNG laden</button></div></div>'+
       '<div class="tool"><div class="sg">'+art(ev)+'<div class="sgt"><span>'+short(d)+'</span><b>'+esc(t)+'</b></div></div><div><b>Social-Grafik</b><small>Quadratisch, im ewent. Look</small><button class="mini" type="button">Als Bild laden</button></div></div>';
   }
-  function openSubmit(pack){form={title:'',date:'',time:'',place:'',town:'Krems',cat:'Wein',desc:'',price:'',link:'',org:'',credit:'',mail:'',tel:'',pack:pack||'free',ai:0};step=1;renderForm();openScrim('#submitScrim')}
+  function openSubmit(pack){form={title:'',date:'',time:'',place:'',town:'Krems',cat:'Wein',desc:'',price:'',link:'',org:'',credit:'',mail:'',tel:'',pack:'free',ai:0};step=1;renderForm();openScrim('#submitScrim')}
   function steps(){return '<div class="steps">'+[1,2,3,4].map(function(i){return '<i class="'+(i<=step?'on':'')+'"></i>'}).join('')+'</div>'}
   function head(t,sub){return '<div class="sheet-top"><span class="label">Schritt '+step+' von 4</span><button class="x" id="sx" aria-label="Schließen">×</button></div>'+steps()+'<h2>'+t+'</h2><p class="note">'+sub+'</p>'}
   function pVal(p){return !p||p==='Gratis'?'':String(p).replace(/[^\d,]/g,'')}
@@ -318,7 +318,7 @@
       '<div class="nav"><button class="btn ghost" id="back">Zurück</button><button class="btn" id="next">Weiter</button></div>';
     }else if(step===4){
       h=head('Wie sichtbar?','Gratis geht immer. Ein Paket kannst du auch später dazubuchen.')+
-      '<div class="opt">'+PACKS.map(function(p){return '<button type="button" data-p="'+p.id+'" aria-pressed="'+(form.pack===p.id)+'"><span><b>'+p.name+'</b><small>'+(p.id==='free'?'Eintrag in der Liste':p.id==='plus'?'Hervorgehoben in der Liste':p.id==='top'?'Plus und Startseite':'Top plus Newsletter und Social, wir melden uns persönlich')+'</small></span><span class="p">€ '+p.price+'</span></button>'}).join('')+'</div>'+
+      '<div class="opt">'+PACKS.map(function(p){return '<button type="button" data-p="'+p.id+'"'+(p.price?' disabled class="soon"':'')+' aria-pressed="'+(form.pack===p.id)+'"><span><b>'+p.name+'</b><small>'+(p.id==='free'?'Eintrag in der Liste':p.id==='plus'?'Hervorgehoben in der Liste':p.id==='top'?'Plus und Startseite':'Top plus Newsletter und Social, wir melden uns persönlich')+'</small></span><span class="p">'+(p.price?'Demnächst':'€ '+p.price)+'</span></button>'}).join('')+'</div>'+
       (form.pack!=='free'?'<div class="field" style="margin-top:18px"><label for="f_link">Ticket-/Anmelde-Link</label><input class="in" id="f_link" inputmode="url" value="'+esc(form.link)+'" placeholder="https://"></div>':'<p class="note">Der Ticket-Button ist ab dem Plus-Paket dabei.</p>')+
       '<p class="note">Du bist für Inhalt und Bildrechte deines Eintrags verantwortlich, nicht ewent. bzw. der Betreiber der Website.</p><p class="note">Wir prüfen jeden neuen Eintrag und schalten ihn meist innerhalb eines Tages frei. Bekannte Veranstalter sind sofort live.</p>'+
       '<div class="nav"><button class="btn ghost" id="back">Zurück</button><button class="btn accent" id="send">Einreichen</button></div>';
@@ -334,7 +334,7 @@
     var sd=$('#send');if(sd)sd.onclick=function(){save();if(form.pack==='free')form.link='';sd.disabled=true;sd.textContent='Wird gesendet …';post('submit',{title:form.title,date:form.date,until:form.until||'',time:form.time,place:form.place,town:form.town,cat:form.cat,desc:form.desc,price:pFmt(form.price),link:form.link,org:form.org,credit:form.credit||'',mail:form.mail,tel:form.tel,pack:form.pack}).then(function(){step=5;renderForm()}).catch(function(er){sd.disabled=false;sd.textContent='Einreichen';toast(er.message);setTimeout(function(){toast('')},4000)})};
     var fcat=$('#fcat');if(fcat)CATS.forEach(function(c){fcat.appendChild(mk(c,form.cat===c,'cat',function(){save();form.cat=c;renderForm()}))});
     var ftown=$('#ftown');if(ftown)TOWNS.forEach(function(t){ftown.appendChild(mk(esc(t),form.town===t,'cat',function(){save();form.town=t;renderForm()}))});
-    s.querySelectorAll('[data-p]').forEach(function(c){c.onclick=function(){save();form.pack=c.dataset.p;renderForm()}});
+    s.querySelectorAll('[data-p]:not([disabled])').forEach(function(c){c.onclick=function(){save();form.pack=c.dataset.p;renderForm()}});
   }
   document.querySelectorAll('[data-open-submit]').forEach(function(b){b.onclick=function(){openSubmit()}});
   document.addEventListener('click',function(ev){var b=ev.target.closest('[data-pack]');if(b)openSubmit(b.dataset.pack)});
