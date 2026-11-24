@@ -545,3 +545,12 @@ footer .hsb h4,footer .hsb b{color:var(--paper)}
   footer .fbar{flex-direction:row;justify-content:space-between;align-items:center}
 }
 @media(min-width:1024px){footer{padding:60px 0 40px;margin-top:96px}footer .wm{font-size:52px}}
+
+/* Footer: Menü und Rechtliches sicher nebeneinander (schlägt ältere .foot-Regeln) */
+footer .wrap.foot .fmenu{max-width:none!important;width:auto;flex-direction:row;flex-wrap:wrap;gap:10px 26px;border:0!important}
+footer .wrap.foot .fmenu>a,footer .wrap.foot .fmenu>a:first-child{display:inline!important;width:auto!important;padding:0!important;border:0!important;font-size:14px!important;line-height:1.4}
+footer .wrap.foot .hs{border:0!important;border-top:0!important;display:inline-block}
+footer .wrap.foot .hs summary{font-size:14px!important;line-height:1.4;padding:0!important;display:inline!important;border:0!important}
+footer .wrap.foot .legal{flex-direction:row!important;flex-wrap:wrap;gap:8px 20px!important;align-items:center!important;font-size:14px!important;justify-self:auto;padding:0!important}
+footer .wrap.foot .fbar{display:flex!important;gap:16px 40px}
+@media(min-width:860px){footer .wrap.foot .fbar{flex-direction:row!important;justify-content:space-between;align-items:center}}
