@@ -571,5 +571,5 @@ footer .by .logo-tint{color:var(--paper)!important;opacity:1!important;margin-le
 /* Footer by fesch. – Variante C1: bündig links, eng, Logo-Unterkante auf Höhe "y"-Unterkante (leicht tiefer) */
 footer .by,footer .by{padding-left:3px!important;gap:3px!important;align-items:flex-end!important;margin-top:6px!important}
 footer .by>span:first-child{line-height:1!important;font-size:15px!important}
-footer .by .logo-tint{margin-left:0!important;transform:translateY(3px)}
-@media(min-width:860px){footer .by{padding-left:3px!important}footer .by .logo-tint{margin-left:0!important;transform:translateY(3px)}}
+footer .by .logo-tint{margin-left:0!important;transform:translateY(2px)}
+@media(min-width:860px){footer .by{padding-left:3px!important}footer .by .logo-tint{margin-left:0!important;transform:translateY(2px)}}
