@@ -111,7 +111,11 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	update_post_meta( $id, '_ew_pack_wish', in_array( $pack, array( 'free', 'plus', 'top', 'premium' ), true ) ? $pack : 'free' );
 	update_post_meta( $id, '_ew_owner_email', $mail );
 	update_post_meta( $id, '_ew_manual', '0' );
-	ewent_attach_submitted_image( $id, $p['img'] ?? '', $title );
+	try {
+		ewent_attach_submitted_image( $id, $p['img'] ?? '', $title );
+	} catch ( \Throwable $e ) {
+		error_log( 'ewent image: ' . $e->getMessage() );
+	}
 
 	wp_mail(
 		ewent_notify_email(),
@@ -207,6 +211,7 @@ function ewent_attach_submitted_image( $post_id, $data, $title ) {
 	}
 	$ext = IMAGETYPE_PNG === $info[2] ? 'png' : ( IMAGETYPE_WEBP === $info[2] ? 'webp' : 'jpg' );
 	require_once ABSPATH . 'wp-admin/includes/image.php';
+	wp_raise_memory_limit( 'image' );
 	$up = wp_upload_bits( sanitize_file_name( sanitize_title( $title ) . '-' . $post_id . '.' . $ext ), null, $bin );
 	if ( ! empty( $up['error'] ) ) {
 		return;
