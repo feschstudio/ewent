@@ -42,7 +42,7 @@ while ( have_posts() ) :
     <a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=<?php echo rawurlencode( $place . ' ' . $town ); ?>">Karte</a>
   </div>
   <?php if ( $manual ) : ?>
-  <div id="claimbox" style="margin-top:26px;padding:18px;border:1.5px dashed var(--line);border-radius:var(--r-sm)"><b>Ist das dein Event?</b><p class="note" style="margin:6px 0 12px">Wir haben es vorerst selbst eingetragen. Melde dich, dann kannst du es bearbeiten, ein Foto hochladen und ein Paket buchen.</p><button class="btn ghost block" id="d_claim" type="button">Event übernehmen</button></div>
+  <div class="fnote" style="margin-top:26px;text-align:left"><b>Manuell angelegt.</b> Dieses Event haben wir manuell angelegt (alle Events im November und Dezember). Bei Änderungen schick uns bitte kurz eine Mail an <a href="mailto:info@ewent.at?subject=<?php echo rawurlencode( 'Änderung: ' . get_the_title() ); ?>">info@ewent.at</a>.</div>
   <?php endif; ?>
 </main>
 <?php endwhile; get_footer();

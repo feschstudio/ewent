@@ -155,6 +155,10 @@ function ewent_account_save() {
 		wp_safe_redirect( add_query_arg( 'msg', 'denied', ewent_account_url() ) );
 		exit;
 	}
+	if ( '1' === get_post_meta( $id, '_ew_manual', true ) ) {
+		wp_safe_redirect( add_query_arg( 'msg', 'denied', ewent_account_url() ) );
+		exit;
+	}
 	$g     = function ( $k ) {
 		return isset( $_POST[ $k ] ) ? wp_unslash( $_POST[ $k ] ) : '';
 	};

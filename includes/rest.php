@@ -118,6 +118,9 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 }
 
 function ewent_rest_claim( WP_REST_Request $r ) {
+	if ( ! apply_filters( 'ewent_allow_claims', false ) ) {
+		return new WP_Error( 'ewent_claims_off', 'Bitte schick Änderungen per Mail an info@ewent.at.', array( 'status' => 403 ) );
+	}
 	$p = $r->get_json_params();
 	if ( ! is_array( $p ) ) {
 		$p = $r->get_body_params();

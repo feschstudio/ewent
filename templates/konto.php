@@ -47,6 +47,9 @@ $tiers = array( 'free' => 'Gratis', 'plus' => 'Plus', 'top' => 'Top', 'premium' 
 		?>
 		<details class="kev" style="border:1.5px solid var(--line);border-radius:var(--r-sm);margin-bottom:14px;background:var(--card)" <?php echo $open === $id ? 'open' : ''; ?>>
 			<summary style="cursor:pointer;padding:16px 18px;font-weight:600;list-style:none"><?php echo esc_html( $ev->post_title ); ?> <span class="label" style="margin-left:8px"><?php echo esc_html( $state . ' · ' . $tiers[ $tier ] ); ?></span></summary>
+			<?php if ( '1' === $m( '_ew_manual' ) ) : ?>
+			<div class="fnote" style="margin:0 18px 18px"><b>Manuell angelegt.</b> Dieses Event haben wir manuell angelegt (alle Events im November und Dezember). Bei Änderungen schick uns bitte kurz eine Mail an <a href="mailto:info@ewent.at">info@ewent.at</a>.</div>
+			<?php else : ?>
 			<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="padding:0 18px 18px">
 				<input type="hidden" name="action" value="ewent_account_save">
 				<input type="hidden" name="event" value="<?php echo (int) $id; ?>">
@@ -87,6 +90,7 @@ $tiers = array( 'free' => 'Gratis', 'plus' => 'Plus', 'top' => 'Top', 'premium' 
 					</div>
 				<?php endif; endif; ?>
 			</form>
+			<?php endif; ?>
 		</details>
 	<?php endforeach; ?>
 	<p style="margin-top:24px"><a class="btn ghost" href="<?php echo esc_url( admin_url( 'admin-post.php?action=ewent_logout' ) ); ?>">Abmelden</a></p>
