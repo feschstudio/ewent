@@ -664,5 +664,65 @@
   "price": "ab € 19",
   "org": "Musikverein Gföhl",
   "desc": "Symphonische Blasmusik mit dem Musikverein Gföhl, zu Gast das Trio The Ridin Dudes mit Vintage-Sound."
+ },
+ {
+  "title": "Petsch Moser + Garish – Live in Krems",
+  "dates": [
+   [
+    "2026-11-27",
+    "19:30"
+   ]
+  ],
+  "place": "Stadtsaal Krems",
+  "town": "Krems",
+  "cat": "Musik",
+  "price": "ab € 19",
+  "org": "Live in Krems",
+  "desc": "Zwei Bands, ein Abend: Garish und Petsch Moser mit eingängigen Songs und intensiven Momenten im Stadtsaal."
+ },
+ {
+  "title": "FÖRTHOF UHK Krems vs. HSG Holding Graz",
+  "dates": [
+   [
+    "2026-11-27",
+    "19:00"
+   ]
+  ],
+  "place": "Sporthalle Krems",
+  "town": "Krems",
+  "cat": "Sport",
+  "price": "ab € 15",
+  "org": "UHK Krems",
+  "desc": "Handball-Heimspiel des UHK Krems gegen die HSG Holding Graz."
+ },
+ {
+  "title": "FLO & WISCH – Weihnachten Last Minute (Droß)",
+  "dates": [
+   [
+    "2026-11-27",
+    "19:30"
+   ]
+  ],
+  "place": "Gemeindesaal Droß, Schloßstraße 250",
+  "town": "Droß",
+  "cat": "Kultur",
+  "price": "ab € 26",
+  "org": "Gemeinde Droß",
+  "desc": "Kabarett-Duo mit Musik: die hektische Vorweihnachtszeit humorvoll aufs Korn genommen."
+ },
+ {
+  "title": "Unternehmerfrühstück Krems & Umgebung",
+  "dates": [
+   [
+    "2026-11-27",
+    "08:30"
+   ]
+  ],
+  "place": "WEINSTEIN Krems",
+  "town": "Krems-Stein",
+  "cat": "Kulinarik",
+  "price": "Eintritt frei",
+  "org": "Unternehmerfrühstück Krems & Umgebung",
+  "desc": "Lockeres Netzwerktreffen für Selbstständige bei Kaffee und Frühstück. Frühstück und Getränke vor Ort selbst bezahlen."
  }
 ]
