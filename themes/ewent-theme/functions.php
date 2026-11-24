@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.9' );
+define( 'EWENT_THEME_VERSION', '0.7.10' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -179,7 +179,7 @@ add_action( 'init', function () {
 
 /** Haftung für Inhalte und Bildrechte: wird an Impressum und AGB angehängt (auch bei schon bestehenden Seiten). */
 add_filter( 'the_content', function ( $c ) {
-	if ( ! is_page( array( 'impressum', 'agb' ) ) || false !== strpos( $c, 'ewent-haftung' ) ) {
+	if ( ! is_page( array( 'impressum', 'agb', 'datenschutz' ) ) || false !== strpos( $c, 'ewent-haftung' ) ) {
 		return $c;
 	}
 	return $c . '<div class="ewent-haftung"><h4>Haftung für Inhalte und Bildrechte</h4>'
