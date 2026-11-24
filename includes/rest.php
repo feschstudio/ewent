@@ -84,6 +84,9 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 			$n++;
 		}
 	}
+	if ( ! ewent_valid_submitted_image( $p['img'] ?? '' ) ) {
+		return new WP_Error( 'ewent_img', 'Bitte lade ein Titelbild hoch (JPG, PNG oder WebP, max. 4 MB).', array( 'status' => 400 ) );
+	}
 	$id = wp_insert_post( array(
 		'post_type'    => 'ewent_event',
 		'post_status'  => 'pending',
@@ -218,4 +221,16 @@ function ewent_attach_submitted_image( $post_id, $data, $title ) {
 	}
 	wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $up['file'] ) );
 	set_post_thumbnail( $post_id, $att );
+}
+
+function ewent_valid_submitted_image( $data ) {
+	if ( ! is_string( $data ) || ! preg_match( '#^data:image/(jpeg|png|webp);base64,#', $data ) ) {
+		return false;
+	}
+	$bin = base64_decode( substr( $data, strpos( $data, ',' ) + 1 ), true );
+	if ( false === $bin || strlen( $bin ) > 4 * 1024 * 1024 ) {
+		return false;
+	}
+	$info = @getimagesizefromstring( $bin );
+	return $info && in_array( $info[2], array( IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP ), true ) && $info[0] <= 4000 && $info[1] <= 4000;
 }
