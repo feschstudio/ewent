@@ -554,3 +554,10 @@ footer .wrap.foot .hs summary{font-size:14px!important;line-height:1.4;padding:0
 footer .wrap.foot .legal{flex-direction:row!important;flex-wrap:wrap;gap:8px 20px!important;align-items:center!important;font-size:14px!important;justify-self:auto;padding:0!important}
 footer .wrap.foot .fbar{display:flex!important;gap:16px 40px}
 @media(min-width:860px){footer .wrap.foot .fbar{flex-direction:row!important;justify-content:space-between;align-items:center}}
+
+/* Footer: "by fesch." enger zusammen, leicht eingerückt, Logo in Paper-Farbe wie "ewent" */
+footer .by{gap:3px!important;margin-top:2px!important;padding-left:6px;color:var(--paper)}
+footer .by>span:first-child{color:rgba(246,243,232,.7);font-size:14px}
+footer .by .logo-tint{color:var(--paper)}
+footer .by .logo-img{height:20px!important}
+@media(min-width:860px){footer .by .logo-img{height:24px!important}footer .by{padding-left:8px}}
