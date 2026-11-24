@@ -338,7 +338,7 @@
   document.querySelectorAll('[data-open-submit]').forEach(function(b){b.onclick=function(){openSubmit()}});
   document.addEventListener('click',function(ev){var b=ev.target.closest('[data-pack]');if(b)openSubmit(b.dataset.pack)});
 
-  $('#nlform').onsubmit=function(ev){ev.preventDefault();var f=this,m=$('#nlmail').value.trim(),s=$('#nlmsg');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){s.className='err';s.textContent='Bitte gib eine gültige E-Mail-Adresse ein.';return}s.className='';post('newsletter',{mail:m}).then(function(){f.innerHTML='<p class="note" style="margin:0">Danke, du bist auf der Liste. Die erste Mail kommt am nächsten Donnerstag.</p>';s.textContent=''}).catch(function(er){s.className='err';s.textContent=er.message})};
+  if($('#nlform'))$('#nlform').onsubmit=function(ev){ev.preventDefault();var f=this,m=$('#nlmail').value.trim(),s=$('#nlmsg');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){s.className='err';s.textContent='Bitte gib eine gültige E-Mail-Adresse ein.';return}s.className='';post('newsletter',{mail:m}).then(function(){f.innerHTML='<p class="note" style="margin:0">Danke, du bist auf der Liste. Die erste Mail kommt am nächsten Donnerstag.</p>';s.textContent=''}).catch(function(er){s.className='err';s.textContent=er.message})};
   var qc=$('#qclr');
   $('#q').addEventListener('input',function(){qc.hidden=!this.value});
   qc.onclick=function(){$('#q').value='';qc.hidden=true;F.q='';render();$('#q').focus()};

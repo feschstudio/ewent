@@ -29,7 +29,9 @@
 	}
   ?></noscript></div>
 
+  <?php if ( apply_filters( 'ewent_show_newsletter', false ) ) : ?>
   <section class="nlbox" id="newsletter"><span class="label">Newsletter</span><h2>Jede Woche: Was sich tut</h2><p>Jeden Donnerstag eine kurze Mail mit den besten Events der Woche in der Region Krems. Kostenlos, jederzeit abbestellbar.</p><form class="nl" id="nlform" novalidate><input type="email" id="nlmail" placeholder="Deine E-Mail" aria-label="E-Mail für den Newsletter" autocomplete="email"><button class="btn accent" type="submit">Anmelden</button></form><small id="nlmsg">Mit der Anmeldung stimmst du dem Empfang zu. Mehr dazu in der <a href="<?php echo esc_url( ewent_page_url( 'datenschutz' ) ); ?>" style="color:inherit">Datenschutzerklärung</a>.</small></section>
+  <?php endif; ?>
   <section class="packs" id="pakete">
     <span class="label">Für Veranstalter</span>
     <h2>Mehr Aufmerksamkeit für dein Event</h2>
