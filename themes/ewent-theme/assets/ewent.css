@@ -477,3 +477,15 @@ select.in,textarea.in{width:100%;font:inherit}
   .foot .hs{border-top:1px solid var(--line)}
   .foot .legal{flex-direction:column;gap:14px;align-items:flex-start;justify-self:start;font-size:15px;padding-top:2px}
 }
+
+/* Mehrtägig: kompakte Karten, damit sie nicht wie Highlights wirken */
+.snap.sm{gap:12px}
+.snap.sm .ev{width:62%;max-width:230px}
+.snap.sm .ev .pic{aspect-ratio:16/10;border-radius:16px}
+.snap.sm .ev .txt{padding:10px 4px 0}
+.snap.sm .ev h3{font-size:16px;margin:0 0 4px;line-height:1.2}
+.snap.sm .ev .meta{font-size:13px}
+.snap.sm .ev .meta .sub{font-size:12.5px}
+.snap.sm .chipdate,.snap.sm .chipbadge{font-size:11px;padding:3px 8px}
+@media(min-width:640px){.snap.sm .ev{width:230px}}
+@media(min-width:1024px){.snap.sm{grid-template-columns:repeat(4,1fr);gap:18px}.snap.sm .ev{width:auto;max-width:none}}
