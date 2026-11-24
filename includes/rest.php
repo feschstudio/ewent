@@ -108,6 +108,7 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	update_post_meta( $id, '_ew_pack_wish', in_array( $pack, array( 'free', 'plus', 'top', 'premium' ), true ) ? $pack : 'free' );
 	update_post_meta( $id, '_ew_owner_email', $mail );
 	update_post_meta( $id, '_ew_manual', '0' );
+	ewent_attach_submitted_image( $id, $p['img'] ?? '', $title );
 
 	wp_mail(
 		ewent_notify_email(),
@@ -183,4 +184,38 @@ function ewent_rest_newsletter( WP_REST_Request $r ) {
 		wp_mail( ewent_notify_email(), 'Newsletter-Anmeldung', "Neue Anmeldung: {$mail}" );
 	}
 	return rest_ensure_response( array( 'ok' => true ) );
+}
+
+/**
+ * Titelbild aus der Einreichung (Data-URL, im Browser auf max. 1600 px verkleinert) speichern.
+ * Fehler hier brechen die Einreichung nicht ab.
+ */
+function ewent_attach_submitted_image( $post_id, $data, $title ) {
+	if ( ! is_string( $data ) || ! preg_match( '#^data:image/(jpeg|png|webp);base64,#', $data, $m ) ) {
+		return;
+	}
+	$bin = base64_decode( substr( $data, strpos( $data, ',' ) + 1 ), true );
+	if ( false === $bin || strlen( $bin ) > 4 * 1024 * 1024 ) {
+		return;
+	}
+	$info = @getimagesizefromstring( $bin );
+	if ( ! $info || ! in_array( $info[2], array( IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP ), true ) || $info[0] > 4000 || $info[1] > 4000 ) {
+		return;
+	}
+	$ext = IMAGETYPE_PNG === $info[2] ? 'png' : ( IMAGETYPE_WEBP === $info[2] ? 'webp' : 'jpg' );
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	$up = wp_upload_bits( sanitize_file_name( sanitize_title( $title ) . '-' . $post_id . '.' . $ext ), null, $bin );
+	if ( ! empty( $up['error'] ) ) {
+		return;
+	}
+	$att = wp_insert_attachment( array(
+		'post_mime_type' => image_type_to_mime_type( $info[2] ),
+		'post_title'     => sanitize_text_field( $title ),
+		'post_status'    => 'inherit',
+	), $up['file'], $post_id );
+	if ( is_wp_error( $att ) || ! $att ) {
+		return;
+	}
+	wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $up['file'] ) );
+	set_post_thumbnail( $post_id, $att );
 }
