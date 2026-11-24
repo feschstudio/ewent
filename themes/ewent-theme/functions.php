@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.23' );
+define( 'EWENT_THEME_VERSION', '0.7.24' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
