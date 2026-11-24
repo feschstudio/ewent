@@ -514,3 +514,19 @@ select.in,textarea.in{width:100%;font:inherit}
   .list .ev .txt{padding:0 6px 0 0}
   .list .ev h3{font-size:18px;margin:0 0 4px}
 }
+
+/* Footer: dunkelgrünes Panel mit Aktions-Button */
+footer{background:var(--accent);color:rgba(246,243,232,.82);border-top:0;border-radius:28px 28px 0 0;position:relative;overflow:hidden;margin-top:72px;padding:36px 0 26px}
+footer::before{content:"";position:absolute;right:-90px;top:-110px;width:300px;height:300px;border-radius:50%;background:#244A38;pointer-events:none}
+footer .wrap{position:relative}
+footer .wm{color:var(--paper)}
+footer .by,footer .tagl,footer .tagl a,footer .legal,footer .legal a,footer .demo{color:rgba(246,243,232,.82)}
+footer .legal a{text-decoration-color:rgba(246,243,232,.35)}
+footer .fmenu{border-bottom-color:rgba(246,243,232,.22)}
+footer .fmenu>a,footer .fmenu>button,footer .hs summary,footer .hsb h4,footer .hsb b{color:var(--paper);border-top-color:rgba(246,243,232,.22)}
+footer .fmenu i,footer .hs summary::after{color:rgba(246,243,232,.6)}
+footer .hs{border-top-color:rgba(246,243,232,.22)}
+footer .hsb{color:rgba(246,243,232,.82)}
+.fcta{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:14px 22px;border:0;border-radius:999px;background:var(--butter);color:var(--ink);font:inherit;font-size:16px;font-weight:500;text-decoration:none;cursor:pointer;transition:transform .15s}
+.fcta:hover{transform:translateY(-1px)}
+@media(min-width:1024px){footer{padding:64px 0 44px;margin-top:96px}.fcta{margin-top:26px}}
