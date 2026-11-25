@@ -20,9 +20,10 @@ while ( have_posts() ) :
 <main class="wrap pagewrap evpage">
   <a class="back" href="<?php echo esc_url( home_url( '/' ) ); ?>">‹ Alle Events</a>
   <?php if ( has_post_thumbnail() ) : ?><div class="pic"><?php the_post_thumbnail( 'large' ); ?></div><?php endif; ?>
-  <span class="label"><?php echo esc_html( $cat ); ?><?php echo 'free' !== $tier ? ' · Anzeige' : ''; ?></span>
+  <span class="label"><?php echo esc_html( $cat ); ?><?php echo in_array( $tier, array( 'top', 'premium' ), true ) ? ' · Anzeige' : ''; ?></span>
   <h1><?php the_title(); ?></h1>
   <div class="desc"><?php echo esc_html( wp_strip_all_tags( get_the_content() ) ); ?></div>
+  <?php $fly = (int) get_post_meta( $id, '_ew_flyer', true ); if ( $fly && wp_attachment_is_image( $fly ) ) : ?><div class="flyer"><h2>Flyer / Plakat</h2><a href="<?php echo esc_url( wp_get_attachment_url( $fly ) ); ?>" target="_blank" rel="noopener"><?php echo wp_get_attachment_image( $fly, 'large' ); ?></a></div><?php endif; ?>
   <?php if ( $first ) : ?>
   <div class="facts">
     <div><span><?php echo $multi ? 'Zeitraum' : 'Datum'; ?></span><span><?php echo esc_html( $multi ? $fmt( $first[0] ) . ' – ' . $fmt( $last ) : $fmt( $first[0] ) ); ?></span></div>

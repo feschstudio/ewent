@@ -69,6 +69,14 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	if ( '' === $title || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) || ! is_email( $mail ) ) {
 		return new WP_Error( 'ewent_invalid', 'Bitte Titel, Datum und eine gültige E-Mail angeben.', array( 'status' => 400 ) );
 	}
+	$pack = sanitize_text_field( $p['pack'] ?? 'free' );
+	$pack = in_array( $pack, array( 'free', 'plus', 'top', 'premium' ), true ) ? $pack : 'free';
+	// Plus ist aktuell gratis freigeschaltet (Filter ewent_plus_free), Top/Premium kommen später.
+	$tier = ( 'plus' === $pack && apply_filters( 'ewent_plus_free', true ) ) ? 'plus' : 'free';
+	if ( 'free' === $tier ) {
+		$until       = '';
+		$p['link']   = '';
+	}
 	$time  = preg_match( '/^\d{2}:\d{2}$/', $time ) ? $time : '00:00';
 	$dates = array( array( $date, $time ) );
 	if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $until ) && $until > $date ) {
@@ -104,15 +112,15 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	update_post_meta( $id, '_ew_price', sanitize_text_field( $p['price'] ?? 'Gratis' ) ?: 'Gratis' );
 	update_post_meta( $id, '_ew_org', sanitize_text_field( $p['org'] ?? '' ) );
 	update_post_meta( $id, '_ew_credit', sanitize_text_field( $p['credit'] ?? '' ) );
-	update_post_meta( $id, '_ew_tier', 'free' );
+	update_post_meta( $id, '_ew_tier', $tier );
 	update_post_meta( $id, '_ew_link', esc_url_raw( $p['link'] ?? '' ) );
 	update_post_meta( $id, '_ew_owner_tel', sanitize_text_field( $p['tel'] ?? '' ) );
-	$pack = sanitize_text_field( $p['pack'] ?? 'free' );
-	update_post_meta( $id, '_ew_pack_wish', in_array( $pack, array( 'free', 'plus', 'top', 'premium' ), true ) ? $pack : 'free' );
+	update_post_meta( $id, '_ew_pack_wish', $pack );
 	update_post_meta( $id, '_ew_owner_email', $mail );
 	update_post_meta( $id, '_ew_manual', '0' );
 	try {
 		ewent_attach_submitted_image( $id, $p['img'] ?? '', $title );
+		ewent_attach_submitted_image( $id, $p['flyer'] ?? '', $title . ' Flyer', true );
 	} catch ( \Throwable $e ) {
 		error_log( 'ewent image: ' . $e->getMessage() );
 	}
@@ -197,7 +205,7 @@ function ewent_rest_newsletter( WP_REST_Request $r ) {
  * Titelbild aus der Einreichung (Data-URL, im Browser auf max. 1600 px verkleinert) speichern.
  * Fehler hier brechen die Einreichung nicht ab.
  */
-function ewent_attach_submitted_image( $post_id, $data, $title ) {
+function ewent_attach_submitted_image( $post_id, $data, $title, $flyer = false ) {
 	if ( ! is_string( $data ) || ! preg_match( '#^data:image/(jpeg|png|webp);base64,#', $data, $m ) ) {
 		return;
 	}
@@ -225,7 +233,11 @@ function ewent_attach_submitted_image( $post_id, $data, $title ) {
 		return;
 	}
 	wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $up['file'] ) );
-	set_post_thumbnail( $post_id, $att );
+	if ( $flyer ) {
+		update_post_meta( $post_id, '_ew_flyer', (int) $att );
+	} else {
+		set_post_thumbnail( $post_id, $att );
+	}
 }
 
 function ewent_valid_submitted_image( $data ) {

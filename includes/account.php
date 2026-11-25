@@ -182,11 +182,30 @@ function ewent_account_save() {
 		update_post_meta( $id, '_ew_link', esc_url_raw( $g( 'link' ) ) );
 	}
 	$dates = ewent_parse_dates_text( $g( 'dates' ) );
+	if ( $dates && 'free' === $tier ) {
+		$dates = array_slice( $dates, 0, 1 );
+	}
 	if ( $dates ) {
 		ewent_set_dates( $id, $dates );
 	}
 
 	$msg = 'saved';
+	if ( ! empty( $_FILES['flyer']['name'] ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		$f  = $_FILES['flyer'];
+		$ok = $f['size'] <= 8 * MB_IN_BYTES && in_array( wp_check_filetype( $f['name'] )['type'], array( 'image/jpeg', 'image/png', 'image/webp' ), true );
+		$fa = $ok ? media_handle_upload( 'flyer', $id ) : 0;
+		if ( $fa && ! is_wp_error( $fa ) ) {
+			update_post_meta( $id, '_ew_flyer', (int) $fa );
+		} else {
+			$msg = 'badfile';
+		}
+	}
+	if ( ! empty( $_POST['remove_flyer'] ) ) {
+		delete_post_meta( $id, '_ew_flyer' );
+	}
 	if ( ! empty( $_FILES['photo']['name'] ) ) {
 		if ( empty( $_POST['rights'] ) ) {
 			$msg = 'norights';

@@ -68,6 +68,10 @@ $tiers = array( 'free' => 'Gratis', 'plus' => 'Plus', 'top' => 'Top', 'premium' 
 				<?php else : ?>
 					<p class="note" style="margin-bottom:14px">Den Ticket-Button gibt es ab dem Paket Plus.</p>
 				<?php endif; ?>
+				<div class="field"><label>Flyer / Plakat (erscheint auf der Event-Seite)</label>
+					<?php $fl = (int) $m( '_ew_flyer' ); if ( $fl && wp_attachment_is_image( $fl ) ) { echo '<div style="max-width:220px;border-radius:12px;overflow:hidden;margin-bottom:8px">' . wp_get_attachment_image( $fl, 'medium' ) . '</div><label style="display:flex;gap:8px;font-weight:400;margin-bottom:8px"><input type="checkbox" name="remove_flyer" value="1"> Flyer entfernen</label>'; } ?>
+					<input type="file" name="flyer" accept="image/jpeg,image/png,image/webp">
+				</div>
 				<div class="field"><label>Foto</label>
 					<?php if ( has_post_thumbnail( $id ) ) { echo '<div style="max-width:220px;border-radius:12px;overflow:hidden;margin-bottom:8px">' . get_the_post_thumbnail( $id, 'medium' ) . '</div>'; } ?>
 					<input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
