@@ -86,6 +86,7 @@ function ewent_occurrences_build( $args ) {
 				'url'     => get_permalink( $p ),
 				'date'    => $d[0],
 				'time'    => $d[1],
+				'tend'    => (string) get_post_meta( $p->ID, '_ew_time_end', true ),
 				'last'    => $last,
 				'multi'   => count( $dates ) > 1,
 				'dates'   => $dates,

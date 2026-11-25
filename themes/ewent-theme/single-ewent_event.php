@@ -27,7 +27,7 @@ while ( have_posts() ) :
   <?php if ( $first ) : ?>
   <div class="facts">
     <div><span><?php echo $multi ? 'Zeitraum' : 'Datum'; ?></span><span><?php echo esc_html( $multi ? $fmt( $first[0] ) . ' – ' . $fmt( $last ) : $fmt( $first[0] ) ); ?></span></div>
-    <div><span><?php echo $multi ? 'Nächster Termin' : 'Beginn'; ?></span><span><?php echo esc_html( ( $multi ? $fmt( $next[0] ) . ', ' : '' ) . $next[1] . ' Uhr' ); ?></span></div>
+    <div><span><?php echo $multi ? 'Nächster Termin' : 'Beginn'; ?></span><span><?php echo esc_html( ( $multi ? $fmt( $next[0] ) . ', ' : '' ) . $next[1] . ( get_post_meta( $id, '_ew_time_end', true ) ? '–' . get_post_meta( $id, '_ew_time_end', true ) : '' ) . ' Uhr' ); ?></span></div>
     <div><span>Ort</span><span><?php echo esc_html( trim( $place . ', ' . $town, ', ' ) ); ?></span></div>
     <div><span>Preis</span><span><?php echo esc_html( $price ); ?></span></div>
     <?php if ( $org ) : ?><div><span>Veranstalter</span><span><?php echo esc_html( $org ); ?></span></div><?php endif; ?>

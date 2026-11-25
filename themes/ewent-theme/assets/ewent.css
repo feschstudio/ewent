@@ -601,3 +601,6 @@ footer .by .logo-tint{margin-left:0!important;transform:translateY(3px)}
 .cald.today{border-color:var(--line)}.cald.on{background:var(--accent);color:#fff}.cald:disabled{color:#c9c4b8}
 .calclr{display:block;width:100%;margin-top:10px;min-height:44px;background:none;border:0;color:var(--accent);font-weight:500}
 input[type=date].in,input[type=time].in{display:flex;align-items:center;min-height:56px}
+
+.field.bad>label{color:#A3402A}.field.bad .in,.field.bad .dpbtn,.field.bad .tsel select,.field.bad .pricebox{border-color:#A3402A!important}
+select.in{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%231E2A22' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 18px center;padding-right:44px;min-height:56px}

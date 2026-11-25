@@ -66,8 +66,16 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	$time  = sanitize_text_field( $p['time'] ?? '' );
 	$until = sanitize_text_field( $p['until'] ?? '' );
 	$mail  = sanitize_email( $p['mail'] ?? '' );
-	if ( '' === $title || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) || ! is_email( $mail ) ) {
-		return new WP_Error( 'ewent_invalid', 'Bitte Titel, Datum und eine gültige E-Mail angeben.', array( 'status' => 400 ) );
+	$tend = sanitize_text_field( $p['tend'] ?? '' );
+	$tend = preg_match( '/^\d{2}:\d{2}$/', $tend ) ? $tend : '';
+	$cat0 = sanitize_text_field( $p['cat'] ?? '' );
+	foreach ( array( 'place', 'town', 'desc', 'org', 'tel', 'credit', 'price' ) as $req ) {
+		if ( '' === trim( (string) ( $p[ $req ] ?? '' ) ) ) {
+			return new WP_Error( 'ewent_invalid', 'Bitte alle Pflichtfelder ausfüllen.', array( 'status' => 400 ) );
+		}
+	}
+	if ( '' === $title || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) || ! preg_match( '/^\d{2}:\d{2}$/', $time ) || ! in_array( $cat0, EWENT_CATS, true ) || ! is_email( $mail ) ) {
+		return new WP_Error( 'ewent_invalid', 'Bitte alle Pflichtfelder ausfüllen und eine gültige E-Mail angeben.', array( 'status' => 400 ) );
 	}
 	$pack = sanitize_text_field( $p['pack'] ?? 'free' );
 	$pack = in_array( $pack, array( 'free', 'plus', 'top', 'premium' ), true ) ? $pack : 'free';
@@ -117,6 +125,7 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	update_post_meta( $id, '_ew_owner_tel', sanitize_text_field( $p['tel'] ?? '' ) );
 	update_post_meta( $id, '_ew_pack_wish', $pack );
 	update_post_meta( $id, '_ew_owner_email', $mail );
+	update_post_meta( $id, '_ew_time_end', $tend );
 	update_post_meta( $id, '_ew_manual', '0' );
 	try {
 		ewent_attach_submitted_image( $id, $p['img'] ?? '', $title );
