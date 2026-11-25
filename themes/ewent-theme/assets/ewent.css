@@ -593,3 +593,5 @@ footer .by .logo-tint{margin-left:0!important;transform:translateY(3px)}
 .pgrid{align-items:start!important}
 .pack{height:auto!important}
 .pack .price small{white-space:nowrap}
+
+.price .was{font-size:.55em;font-weight:400;color:var(--muted);text-decoration:line-through;margin-right:8px;vertical-align:middle}
