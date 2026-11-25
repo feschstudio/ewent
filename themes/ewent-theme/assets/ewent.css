@@ -619,3 +619,7 @@ select.in{appearance:none;-webkit-appearance:none;background:#fff url("data:imag
 .snap .chipbadge{top:auto!important;bottom:14px;right:auto!important;left:14px}
 .snap .chipdate{max-width:calc(100% - 28px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .snap.sm .chipbadge{bottom:8px;left:8px}
+
+/* Mobil: Seite darf nie seitlich verschiebbar sein */
+html,body{max-width:100%;overflow-x:clip}
+@media(max-width:1023px){.snapwrap{overflow:hidden;max-width:100%;min-width:0}#featuredBox,#longBox,#list,#weekBox{max-width:100%;overflow-x:clip}}
