@@ -163,7 +163,7 @@
     var bn=$('#banner');
     if(S.banner&&C.btxt){bn.innerHTML='<button class="bnr" id="bnrBtn" type="button">'+esc(C.btxt)+' <span>›</span></button>';$('#bnrBtn').onclick=function(){F.q=C.blink||'';$('#q').value=F.q;render();var l=$('#list');if(l)l.scrollIntoView({behavior:'smooth'})}}else bn.innerHTML='';
     var n=activeCount();$('#fcount').textContent=n?n:'';
-    var all=visible(),isLong=F.time==='long',showRow=F.time==='all'&&!F.q,lg=uniq(all.filter(function(e){return e.long})),listAll=isLong?uniq(all):showRow?all.filter(function(e){return !e.long}):all;
+    var all=visible(),isLong=F.time==='long',showRow=F.time==='all'&&!F.q,lg=uniq(all.filter(function(e){return e.long})),listAll=isLong?uniq(all):showRow?all.filter(function(e){return !e.long}).concat(lg).sort(function(a,b){return a.date-b.date||(a.t<b.t?-1:a.t>b.t?1:0)}):all;
     var parts=[];if(F.q)parts.push('„'+F.q+'“');if(F.time!=='all'&&timeName())parts.push(timeName());F.cats.forEach(function(c){parts.push(c)});F.towns.forEach(function(c){parts.push(c)});if(F.free)parts.push('Gratis');
     var pl=[];
     if(F.q)pl.push(['q','','„'+F.q+'“']);
