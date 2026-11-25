@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.44' );
+define( 'EWENT_THEME_VERSION', '0.7.46' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -35,6 +35,7 @@ function ewent_theme_data() {
 			'btxt' => (string) get_option( 'ewent_banner_text', '' ),
 			'blink' => (string) get_option( 'ewent_banner_link', '' ),
 			'wk'   => ewent_picks(),
+			'top'  => ewent_top_titles(),
 		),
 		'events' => $events,
 	);
@@ -113,6 +114,11 @@ add_action( 'after_switch_theme', function () {
 } );
 
 /** Wochenempfehlung: eine Zeile pro Tipp, "Event-Titel | kurzer Satz". */
+function ewent_top_titles() {
+	$raw = trim( (string) get_option( 'ewent_top', "Kremser Adventzauber\nPetsch Moser\nSchick Sisters\nWachauer Advent" ) );
+	return array_values( array_filter( array_map( 'trim', preg_split( '/\r?\n/', $raw ) ) ) );
+}
+
 function ewent_picks() {
 	$out = array();
 	foreach ( preg_split( '/\r?\n/', (string) get_option( 'ewent_picks', '' ) ) as $line ) {
@@ -130,6 +136,7 @@ add_action( 'admin_menu', function () {
 		if ( isset( $_POST['ewent_home_nonce'] ) && wp_verify_nonce( $_POST['ewent_home_nonce'], 'ewent_home' ) && current_user_can( 'manage_options' ) ) {
 			update_option( 'ewent_banner_text', sanitize_text_field( wp_unslash( $_POST['banner_text'] ?? '' ) ) );
 			update_option( 'ewent_banner_link', sanitize_text_field( wp_unslash( $_POST['banner_link'] ?? '' ) ) );
+			update_option( 'ewent_top', sanitize_textarea_field( wp_unslash( $_POST['top'] ?? '' ) ) );
 			update_option( 'ewent_picks', sanitize_textarea_field( wp_unslash( $_POST['picks'] ?? '' ) ) );
 			echo '<div class="notice notice-success"><p>Gespeichert.</p></div>';
 		}
@@ -140,6 +147,9 @@ add_action( 'admin_menu', function () {
 		<p>Leer lassen = kein Banner.</p>
 		<p><label>Text<br><input type="text" class="large-text" name="banner_text" value="<?php echo esc_attr( get_option( 'ewent_banner_text', '' ) ); ?>"></label></p>
 		<p><label>Suchbegriff beim Antippen (z. B. Advent)<br><input type="text" class="regular-text" name="banner_link" value="<?php echo esc_attr( get_option( 'ewent_banner_link', '' ) ); ?>"></label></p>
+		<h2>Highlights oben (4 Stück)</h2>
+		<p>Eine Zeile pro Event, es reicht ein Teil des Titels. Leer lassen = Standardauswahl.</p>
+		<p><textarea name="top" rows="4" class="large-text code"><?php echo esc_textarea( implode( "\n", ewent_top_titles() ) ); ?></textarea></p>
 		<h2>Wochenempfehlung</h2>
 		<p>Eine Zeile pro Tipp: <code>Event-Titel | kurzer Satz</code>. Der Titel muss genau so heißen wie das Event.</p>
 		<p><textarea name="picks" rows="6" class="large-text code"><?php echo esc_textarea( get_option( 'ewent_picks', '' ) ); ?></textarea></p>
