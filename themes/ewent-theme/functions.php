@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.50' );
+define( 'EWENT_THEME_VERSION', '0.7.51' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -50,7 +50,23 @@ add_action( 'wp_head', function () {
 	echo '<meta name="theme-color" content="#F6F3E8">' . "\n";
 	echo '<link rel="icon" type="image/png" sizes="32x32" href="' . esc_url( $i . 'favicon-32.png' ) . '">' . "\n";
 	echo '<link rel="icon" type="image/png" sizes="64x64" href="' . esc_url( $i . 'favicon-64.png' ) . '">' . "\n";
-	echo '<meta property="og:image" content="' . esc_url( $i . 'og-image.png' ) . '">' . "\n";
+	$og_img = $i . 'og-image.png';
+	if ( is_singular( 'ewent_event' ) ) {
+		$pid = get_queried_object_id();
+		$big = get_the_post_thumbnail_url( $pid, 'large' );
+		if ( $big ) {
+			$og_img = $big;
+		}
+		$desc = wp_trim_words( wp_strip_all_tags( get_post_field( 'post_content', $pid ) ), 28, '…' );
+		echo '<meta property="og:type" content="article">' . "\n";
+		echo '<meta property="og:site_name" content="ewent.">' . "\n";
+		echo '<meta property="og:title" content="' . esc_attr( get_the_title( $pid ) ) . '">' . "\n";
+		if ( $desc ) {
+			echo '<meta property="og:description" content="' . esc_attr( $desc ) . '">' . "\n";
+		}
+		echo '<meta property="og:url" content="' . esc_url( get_permalink( $pid ) ) . '">' . "\n";
+	}
+	echo '<meta property="og:image" content="' . esc_url( $og_img ) . '">' . "\n";
 	echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
 	echo '<link rel="apple-touch-icon" sizes="180x180" href="' . esc_url( $i . 'apple-touch-icon.png' ) . '">' . "\n";
 	echo '<link rel="manifest" href="' . esc_url( home_url( '/ewent-manifest.json' ) ) . '">' . "\n";

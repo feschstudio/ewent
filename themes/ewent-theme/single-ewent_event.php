@@ -20,7 +20,8 @@ while ( have_posts() ) :
 <main class="wrap pagewrap evpage">
   <a class="back" href="<?php echo esc_url( home_url( '/' ) ); ?>">‹ Alle Events</a>
   <?php if ( has_post_thumbnail() ) : ?><div class="pic"><?php the_post_thumbnail( 'large' ); ?></div><?php endif; ?>
-  <span class="label"><?php echo esc_html( $cat ); ?><?php echo in_array( $tier, array( 'top', 'premium' ), true ) ? ' · Anzeige' : ''; ?></span>
+  <div class="evtop"><span class="label"><?php echo esc_html( $cat ); ?><?php echo in_array( $tier, array( 'top', 'premium' ), true ) ? ' · Anzeige' : ''; ?></span>
+    <button class="shareic" type="button" data-share aria-label="Teilen"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></button></div>
   <h1><?php the_title(); ?></h1>
   <div class="desc"><?php echo esc_html( wp_strip_all_tags( get_the_content() ) ); ?></div>
   <?php $fly = (int) get_post_meta( $id, '_ew_flyer', true ); if ( $fly && wp_attachment_is_image( $fly ) ) : ?><div class="flyer"><h2>Flyer / Plakat</h2><a href="<?php echo esc_url( wp_get_attachment_url( $fly ) ); ?>" target="_blank" rel="noopener"><?php echo wp_get_attachment_image( $fly, 'large' ); ?></a></div><?php endif; ?>
@@ -38,7 +39,7 @@ while ( have_posts() ) :
   <?php endif; ?>
   <?php if ( $link ) : ?><a class="btn accent block" target="_blank" rel="noopener nofollow" href="<?php echo esc_url( $link ); ?>">Tickets / Anmeldung</a><?php endif; ?>
   <div class="dact">
-    <button class="btn ghost" id="d_share" type="button">Teilen</button>
+    <button class="btn ghost" id="d_share" data-share type="button">Teilen</button>
     <button class="btn ghost" id="d_cal" type="button">Zum Kalender</button>
     <a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=<?php echo rawurlencode( $place . ' ' . $town ); ?>">Karte</a>
   </div>
