@@ -613,3 +613,10 @@ select.in{appearance:none;-webkit-appearance:none;background:#fff url("data:imag
 .tpb.on{background:var(--accent);border-color:var(--accent);color:#fff}
 #submitPad .nav{position:sticky;bottom:0;z-index:2;margin:18px -2px 0;padding:12px 2px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(to bottom,rgba(246,243,232,0),var(--paper) 28%)}
 #submitPad .opt button{padding:14px 18px}
+
+/* Karussell-Karten: Inhalt oben ausrichten, Chips nicht überlappen */
+.snap .ev{display:flex!important;flex-direction:column;justify-content:flex-start;align-self:flex-start}
+.snap .chipbadge{top:auto!important;bottom:14px;right:auto!important;left:14px}
+.snap .chipdate{max-width:calc(100% - 28px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.snap.sm .chipbadge{bottom:8px;left:8px}
+@media(min-width:1024px){.list .ev{display:flex;flex-direction:column;justify-content:flex-start}}
