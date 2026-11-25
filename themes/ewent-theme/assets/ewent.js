@@ -175,8 +175,10 @@
     var fe=[];
     if(!parts.length){(C.top||[]).forEach(function(t){t=String(t).toLowerCase();var m=all.filter(function(e){return e.title.toLowerCase().indexOf(t)>-1})[0];if(m&&fe.indexOf(m)<0&&!fe.some(function(x){return x.title===m.title}))fe.push(m)});
       if(fe.length<4)all.filter(function(e){return e.tier==='top'||e.tier==='premium'}).forEach(function(e){if(fe.length<4&&!fe.some(function(x){return x.title===e.title}))fe.push(e)});fe=fe.slice(0,4)}
-    $('#featuredBox').innerHTML=fe.length?'<div class="section-head"><h2>Highlights</h2><span class="label">Wischen</span></div><div class="snap">'+fe.map(card).join('')+'</div>':'';
-    var lb=$('#longBox');if(lb)lb.innerHTML='';
+    $('#featuredBox').innerHTML=fe.length?'<div class="section-head"><div><span class="label">Unsere Auswahl</span><h2>Top Events</h2></div><span class="label">Wischen</span></div><div class="snap">'+fe.map(card).join('')+'</div>':'';
+    var lb=$('#longBox');
+    if(lb)lb.innerHTML=showRow&&lg.length?'<div class="section-head" style="margin-top:'+(fe.length?46:0)+'px"><h2>Mehrtägig und laufend</h2><span class="label">'+lg.length+(lg.length===1?' Event':' Events')+'</span></div><div class="snapwrap"><button type="button" class="snapnav prev" aria-label="Zurück" hidden>‹</button><div class="snap sm">'+lg.map(lcard).join('')+'</div><button type="button" class="snapnav next" aria-label="Weiter">›</button></div>':'';
+    if(lb){var sw=lb.querySelector('.snapwrap');if(sw){var sn=sw.querySelector('.snap'),pv=sw.querySelector('.prev'),nx=sw.querySelector('.next');var upd=function(){pv.hidden=sn.scrollLeft<8;nx.hidden=sn.scrollLeft+sn.clientWidth>=sn.scrollWidth-8};pv.onclick=function(){sn.scrollBy({left:-sn.clientWidth*.8,behavior:'smooth'})};nx.onclick=function(){sn.scrollBy({left:sn.clientWidth*.8,behavior:'smooth'})};sn.addEventListener('scroll',upd,{passive:true});setTimeout(upd,50)}}
     var wk=$('#weekBox');
     if(!parts.length){
       var picks=[['Jazz im Weinkeller','Kleiner Keller, großer Sound. Ideal für einen Abend zu zweit.'],['Weinwanderung im Dezember','Zwei Stunden durch die Terrassen, vier Stationen mit Verkostung.'],['Plätzchen backen für alle','Offene Backstube, perfekt für Familien am Nachmittag.']];
@@ -193,7 +195,7 @@
       if(!isLong&&last)html+='</div></section>';
       if(rest)html+='<button type="button" class="btn ghost" id="moreDays" style="display:block;margin:24px auto 0">Weitere '+rest+' Einträge anzeigen</button>';
     }
-    $('#list').innerHTML='<div class="section-head" style="margin-top:'+(fe.length?46:0)+'px"><h2>'+(parts.length?'Ergebnisse':'Alle Veranstaltungen')+'</h2><span class="label">'+listAll.length+' Einträge</span></div>'+html;
+    $('#list').innerHTML='<div class="section-head" style="margin-top:'+((fe.length||(showRow&&lg.length))?46:0)+'px"><h2>'+(parts.length?'Ergebnisse':'Alle Veranstaltungen')+'</h2><span class="label">'+listAll.length+' Einträge</span></div>'+html;
     document.querySelectorAll('.ev').forEach(function(b){b.onclick=function(){openDetail(EV[+b.dataset.i])}});
     var er=$('#empty-reset');if(er)er.onclick=resetAll;
     var md=$('#moreDays');if(md)md.onclick=function(){MORE=true;render()};
