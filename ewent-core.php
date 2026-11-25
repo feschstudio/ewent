@@ -2,7 +2,7 @@
 /**
  * Plugin Name: ewent core
  * Description: Veranstaltungskalender Region Krems (ewent. by fesch.): Events, Freigabe, Übernahme-Anfragen, Einreichen, Grundbefüllung.
- * Version: 0.7.36
+ * Version: 0.7.37
  * Author: fesch.
  * Text Domain: ewent-core
  * Requires PHP: 7.4
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_VERSION', '0.7.36' );
+define( 'EWENT_VERSION', '0.7.37' );
 define( 'EWENT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'EWENT_URL', plugin_dir_url( __FILE__ ) );
 
@@ -29,6 +29,7 @@ require_once EWENT_DIR . 'includes/shop.php';
 require_once EWENT_DIR . 'includes/seed.php';
 require_once EWENT_DIR . 'includes/settings.php';
 require_once EWENT_DIR . 'includes/shortcode.php';
+require_once EWENT_DIR . 'includes/retention.php';
 
 // Updates aus dem GitHub-Repo: erscheinen im WordPress unter Dashboard > Aktualisierungen.
 require_once EWENT_DIR . 'lib/plugin-update-checker/load-v5p6.php';
