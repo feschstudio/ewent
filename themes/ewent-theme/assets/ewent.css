@@ -631,3 +631,6 @@ html,body{max-width:100%;overflow-x:clip}
 .evpage .evtop{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .evpage .shareic{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;padding:0;flex:none}
 .evpage .shareic:hover{background:var(--ink);color:var(--paper)}
+.pad .evtop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pad .shareic{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;padding:0;flex:none}
+.pad .shareic:hover{background:var(--ink);color:var(--paper)}
