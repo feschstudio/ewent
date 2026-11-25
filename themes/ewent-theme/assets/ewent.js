@@ -246,7 +246,6 @@
       '<p class="note" style="margin:18px 0 0;font-size:12.5px">Angaben und Bilder stammen von den Veranstaltern. Für Inhalt, Richtigkeit und Bildrechte sind allein diese verantwortlich, nicht ewent. bzw. der Betreiber der Website.</p><div class="dact"><button class="btn ghost" id="d_share" type="button">Teilen</button><button class="btn ghost" id="d_cal" type="button">Zum Kalender</button><a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place+', '+e.town)+'">Anfahrt</a></div>'+
       (e.manual?'<div class="fnote" style="margin-top:26px;text-align:left"><b>Manuell angelegt.</b> Dieses Event haben wir manuell angelegt (alle Events im November und Dezember). Bei Änderungen schick uns bitte kurz eine Mail an <a href="mailto:info@ewent.at?subject='+encodeURIComponent('Änderung: '+e.title)+'">info@ewent.at</a>.</div>':'')+(more.length?'<div class="agrp" style="margin-top:26px"><span class="label">Mehr von '+esc(e.org)+'</span>'+more.map(function(x){return '<button class="wk" data-mi="'+x.i+'"><span class="wkpic">'+thumb(x)+'</span><span><b>'+esc(x.title)+'</b><small>'+short(x.date)+' · '+x.t+'</small></span></button>'}).join('')+'</div>':'')+'</div>';
     $('#dx').onclick=function(){closeScrim('#detailScrim')};
-    var cb=$('#d_claim');if(cb)cb.onclick=function(){var w=$('#claimbox');w.innerHTML='<b>Event übernehmen</b><div class="field" style="margin-top:12px"><label for="c_mail">Deine E-Mail</label><input class="in" id="c_mail" type="email" inputmode="email" autocomplete="email" placeholder="name@veranstalter.at"></div><p class="note" id="c_err" style="color:#A3402A;display:none" role="alert">Bitte eine gültige E-Mail eingeben.</p><button class="btn accent block" id="c_send" type="button">Übernahme anfragen</button>';$('#c_send').onclick=function(){var m=$('#c_mail').value.trim();if(!/^\S+@\S+\.\S+$/.test(m)){$('#c_err').style.display='block';return}var sb=$('#c_send');sb.disabled=true;post('claim',{event:e.id,mail:m}).then(function(){w.innerHTML='<b>Danke, deine Anfrage ist raus.</b><p class="note" style="margin:8px 0 0">Wir prüfen kurz, ob das Event zu dir gehört, und melden uns bei '+esc(m)+'. Danach kannst du es bearbeiten.</p>'}).catch(function(er){sb.disabled=false;var c=$('#c_err');c.textContent=er.message;c.style.display='block'})}};
     $('#d_share').onclick=function(){var b=this,txt=e.title+' · '+lbl(e.date);if(navigator.share){navigator.share({title:e.title,text:txt,url:e.url||location.href}).catch(function(){})}else{try{navigator.clipboard.writeText(txt+' '+(e.url||location.href))}catch(x){}b.textContent='Kopiert';setTimeout(function(){b.textContent='Teilen'},1600)}};
     $('#d_cal').onclick=function(){var b=this;try{var blob=new Blob([ics(e)],{type:'text/calendar'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='event.ics';document.body.appendChild(a);a.click();a.remove()}catch(x){}b.textContent='Geladen';setTimeout(function(){b.textContent='Zum Kalender'},1600)};
     s.querySelectorAll('[data-mi]').forEach(function(b){b.onclick=function(){openDetail(EV[+b.dataset.mi]);$('#detailSheet').scrollTop=0}});
@@ -256,22 +255,13 @@
   function ics(e){var p=function(n){return (n<10?'0':'')+n},h=e.t.split(':'),ymd=e.date.getFullYear()+p(e.date.getMonth()+1)+p(e.date.getDate()),st=ymd+'T'+h[0]+h[1]+'00',en=ymd+'T'+p((+h[0]+2)%24)+h[1]+'00';return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ewent.//DE','BEGIN:VEVENT','UID:'+e.i+'@ewent.','DTSTAMP:'+st,'DTSTART:'+st,'DTEND:'+en,'SUMMARY:'+e.title,'LOCATION:'+e.place+', '+e.town,'DESCRIPTION:'+e.desc,'END:VEVENT','END:VCALENDAR'].join('\r\n')}
   function packHTML(p){
     return '<div class="pack'+(p.hot?' hot':'')+(p.live?'':' soon')+'"><div class="row"><h3>'+p.name+'</h3>'+(p.hot?'<span class="badge">Beliebt</span>':'')+'</div>'+
-      '<div class="price">'+(p.now!==undefined?'<s class="was">€ '+p.price+'</s> € '+p.now+' <small>zum Start · pro Event</small>':'€ '+p.price+' <small>pro Event</small>')+'</div>'+'<div class="from"><span>'+p.from+'</span></div><ul>'+p.items.map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+'</ul>'+
+      '<div class="price">'+(p.now!==undefined?'<s class="was">€ '+p.price+'</s>€ '+p.now:'€ '+p.price)+'</div><small class="psub">'+(p.now!==undefined?'zum Start · pro Event':'pro Event')+'</small>'+'<div class="from"><span>'+p.from+'</span></div><ul>'+p.items.map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+'</ul>'+
       (!p.live?'<button class="btn ghost block" disabled>Demnächst verfügbar</button>':'<button class="btn '+(p.hot?'accent':'ghost')+' block" data-pack="'+p.id+'">'+(p.id==='free'?'Gratis eintragen':'Plus wählen')+'</button>')+'</div>';
   }
   $('#packGrid').innerHTML=PACKS.map(packHTML).join('');
 
   /* Eintragen */
   var form,step;
-  function qr(seed){var n=21,h=0,i,x,y,o='<svg viewBox="0 0 21 21" shape-rendering="crispEdges" role="img" aria-label="QR-Code Platzhalter"><rect width="21" height="21" fill="#fff"/>';for(i=0;i<seed.length;i++)h=(h*31+seed.charCodeAt(i))>>>0;for(y=0;y<n;y++)for(x=0;x<n;x++){var on,fx=(x<7||x>=n-7),fy=(y<7||y>=n-7);if(fx&&fy&&!(x>=n-7&&y>=n-7)){var lx=x<7?x:x-(n-7),ly=y<7?y:y-(n-7);on=(lx===0||lx===6||ly===0||ly===6||(lx>=2&&lx<=4&&ly>=2&&ly<=4))}else{h=(h*1103515245+12345)>>>0;on=((h>>>16)&1)===1}if(on)o+='<rect x="'+x+'" y="'+y+'" width="1" height="1" fill="#111"/>'}return o+'</svg>'}
-  function toolsHTML(){
-    var t=form.title||'Dein Event',slug=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'event';
-    var d=form.date?new Date(form.date+'T12:00:00'):base;
-    var ev={i:3,cat:form.cat};
-    return '<div class="tool"><div><b>Eigene Event-Seite</b><small>ewent.at/krems/'+esc(slug)+'</small><button class="mini" type="button">Link kopieren</button></div></div>'+
-      '<div class="tool"><div class="qr">'+qr(slug)+'</div><div><b>QR-Code</b><small>Für Plakat, Flyer und Aushang</small><button class="mini" type="button">Als PNG laden</button></div></div>'+
-      '<div class="tool"><div class="sg">'+art(ev)+'<div class="sgt"><span>'+short(d)+'</span><b>'+esc(t)+'</b></div></div><div><b>Social-Grafik</b><small>Quadratisch, im ewent. Look</small><button class="mini" type="button">Als Bild laden</button></div></div>';
-  }
   function openSubmit(pack){form={title:'',date:'',time:'',place:'',town:'Krems',cat:'Wein',desc:'',price:'',link:'',org:'',credit:'',mail:'',tel:'',pack:(pack==='plus'?'plus':'free'),ai:0,img:'',fly:'',until:''};step=1;renderForm();openScrim('#submitScrim')}
   function steps(){return '<div class="steps">'+[1,2,3,4].map(function(i){return '<i class="'+(i<=step?'on':'')+'"></i>'}).join('')+'</div>'}
   function head(t,sub){return '<div class="sheet-top"><span class="label">Schritt '+step+' von 4</span><button class="x" id="sx" aria-label="Schließen">×</button></div>'+steps()+'<h2>'+t+'</h2><p class="note">'+sub+'</p>'}
@@ -283,22 +273,6 @@
   function save(){var m={f_title:'title',f_date:'date',f_time:'time',f_until:'until',f_place:'place',f_town:'town',f_desc:'desc',f_price:'price',f_link:'link',f_org:'org',f_credit:'credit',f_mail:'mail',f_tel:'tel'};Object.keys(m).forEach(function(k){if($('#'+k))form[m[k]]=val(k)});if($('#f_price'))form.price=pFmt(val('f_price'))}
   function renderForm(){
     var s=$('#submitPad'),h='';
-    if(step===0){
-      h='<div class="sheet-top"><span class="label">Neues Event</span><button class="x" id="sx" aria-label="Schließen">×</button></div><h2>Wie möchtest du eintragen?</h2><p class="note">Am schnellsten geht es mit einem Foto vom Flyer oder Plakat. Die KI füllt das Formular für dich aus.</p>'+
-      '<label class="drop" for="f_flyer"><b>Flyer oder Plakat hochladen</b><small>Foto, Screenshot oder PDF · ca. 30 Sekunden</small><input id="f_flyer" type="file" accept="image/*,application/pdf" hidden></label>'+
-      '<button class="btn ghost block" id="demoscan" type="button">Demo: Beispiel-Flyer auslesen</button>'+
-      '<button class="linkbtn" id="manual" type="button">Lieber von Hand eintragen</button>';
-      s.innerHTML=h;
-      $('#sx').onclick=function(){closeScrim('#submitScrim')};
-      $('#manual').onclick=function(){step=1;renderForm()};
-      var scan=function(){
-        s.innerHTML='<div class="done"><div class="scan"><span></span></div><h2>KI liest deinen Flyer…</h2><p class="note">Titel, Datum, Ort und Preis werden erkannt.</p></div>';
-        setTimeout(function(){var d=new Date(base);d.setDate(d.getDate()+9);form.title='Hofheuriger im Herbst';form.date=iso(d);form.time='18:00';form.place='Weingut Beispiel';form.town='Langenlois';form.cat='Wein';form.desc='Neuer Wein, Brettljause und Musik im Hof. Bei Schlechtwetter im Keller.';form.price='Gratis';form.org='Weingut Beispiel';form.ai=1;step=1;renderForm()},1700)
-      };
-      $('#demoscan').onclick=scan;
-      $('#f_flyer').onchange=function(){var f=this.files&&this.files[0];if(f&&f.size>10*1024*1024){var n=s.querySelector('.note');n.textContent='Die Datei ist größer als 10 MB. Bitte ein kleineres Foto wählen.';n.style.color='#A3402A';return}scan()};
-      return;
-    }
     if(step===1){
       h=head('Wie sichtbar?','Du kannst jetzt gratis starten oder Plus wählen, das ist aktuell ebenfalls gratis.')+
       '<div class="opt">'+PACKS.map(function(p){var sub=p.id==='free'?'Eintrag in der Liste':p.id==='plus'?'Mit Ticket-Button und mehrtägigen Events':p.id==='top'?'Hervorgehoben und Top-Platzierung auf der Startseite':'Top plus Newsletter und Social, wir melden uns persönlich';return '<button type="button" data-p="'+p.id+'"'+(p.live?'':' disabled class="soon"')+' aria-pressed="'+(form.pack===p.id)+'"><span><b>'+p.name+'</b><small>'+sub+'</small></span><span class="p">'+(!p.live?'Demnächst':p.now!==undefined?'€ '+p.now+' <s>€ '+p.price+'</s>':'€ 0')+'</span></button>'}).join('')+'</div>'+
