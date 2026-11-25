@@ -80,10 +80,10 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	$pack = sanitize_text_field( $p['pack'] ?? 'free' );
 	$pack = in_array( $pack, array( 'free', 'plus', 'top', 'premium' ), true ) ? $pack : 'free';
 	// Plus ist aktuell gratis freigeschaltet (Filter ewent_plus_free), Top/Premium kommen später.
-	$tier = ( 'plus' === $pack && apply_filters( 'ewent_plus_free', true ) ) ? 'plus' : 'free';
-	if ( 'free' === $tier ) {
-		$until       = '';
-		$p['link']   = '';
+	$tier = 'free';
+	if ( 'free' === $tier && ! apply_filters( 'ewent_start_promo', true ) ) {
+		$until     = '';
+		$p['link'] = '';
 	}
 	$time  = preg_match( '/^\d{2}:\d{2}$/', $time ) ? $time : '00:00';
 	$dates = array( array( $date, $time ) );

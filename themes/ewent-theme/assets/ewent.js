@@ -1,10 +1,11 @@
 (function(){
   var CATS=['Wein','Kulinarik','Musik','Markt','Kultur','Familie','Sport'];
   var TOWNS=['Krems','Stein','Dürnstein','Spitz','Weißenkirchen','Furth bei Göttweig','Langenlois','Gobelsburg','Traismauer','Herzogenburg'];
+  var PROMO=true;
   var PACKS=[
-    {id:'free',name:'Gratis',price:0,live:1,from:'Höhepunkte',items:['Eintrag in der Liste','Eigene Event-Seite','Foto und Flyer/Plakat hochladen','Teilen, Kalender und Karte','Bearbeiten im Kundenkonto']},
-    {id:'plus',name:'Plus',price:19,now:0,live:1,hot:1,from:'Alles aus Gratis',items:['Ticket-Button zu deinem Ticket- oder Anmelde-Link','Mehrtägige Events']},
-    {id:'top',name:'Top',price:49,from:'Alles aus Plus',items:['Hervorgehoben in der Liste','Top-Platzierung Startseite']},
+    {id:'free',name:'Gratis',price:0,live:1,desc:'Startaktion: inklusive Ticket-Link und mehrtägigen Events.',from:'Höhepunkte',items:['Eintrag in der Liste','Eigene Event-Seite','Foto und Flyer/Plakat hochladen','Teilen, Kalender und Karte','Bearbeiten im Kundenkonto']},
+    {id:'plus',name:'Plus',price:19,from:'Alles aus Gratis',items:['Ticket-Button zu deinem Ticket- oder Anmelde-Link','Mehrtägige Events']},
+    {id:'top',name:'Top',price:49,hot:1,from:'Alles aus Plus',items:['Hervorgehoben in der Liste','Top-Platzierung Startseite']},
     {id:'premium',name:'Premium',price:89,from:'Alles aus Top',items:['Newsletter-Erwähnung','Social-Post von ewent.','Wir melden uns persönlich und besprechen die Inhalte mit dir']}
   ];
 
@@ -255,14 +256,14 @@
   function ics(e){var p=function(n){return (n<10?'0':'')+n},h=e.t.split(':'),ymd=e.date.getFullYear()+p(e.date.getMonth()+1)+p(e.date.getDate()),st=ymd+'T'+h[0]+h[1]+'00',en=ymd+'T'+p((+h[0]+2)%24)+h[1]+'00';return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ewent.//DE','BEGIN:VEVENT','UID:'+e.i+'@ewent.','DTSTAMP:'+st,'DTSTART:'+st,'DTEND:'+en,'SUMMARY:'+e.title,'LOCATION:'+e.place+', '+e.town,'DESCRIPTION:'+e.desc,'END:VEVENT','END:VCALENDAR'].join('\r\n')}
   function packHTML(p){
     return '<div class="pack'+(p.hot?' hot':'')+(p.live?'':' soon')+'"><div class="row"><h3>'+p.name+'</h3>'+(p.hot?'<span class="badge">Beliebt</span>':'')+'</div>'+
-      '<div class="price">'+(p.now!==undefined?'<s class="was">€ '+p.price+'</s>€ '+p.now:'€ '+p.price)+'</div><small class="psub">'+(p.now!==undefined?'zum Start · pro Event':'pro Event')+'</small>'+'<div class="from"><span>'+p.from+'</span></div><ul>'+p.items.map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+'</ul>'+
-      (!p.live?'<button class="btn ghost block" disabled>Demnächst verfügbar</button>':'<button class="btn '+(p.hot?'accent':'ghost')+' block" data-pack="'+p.id+'">'+(p.id==='free'?'Gratis eintragen':'Plus wählen')+'</button>')+'</div>';
+      '<div class="price">'+'€ '+p.price+'</div><small class="psub">'+'pro Event'+'</small>'+(p.desc?'<p class="pdesc">'+esc(p.desc)+'</p>':'')+'<div class="from"><span>'+p.from+'</span></div><ul>'+p.items.map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+'</ul>'+
+      (!p.live?'<button class="btn ghost block" disabled>Demnächst verfügbar</button>':'<button class="btn ghost block" data-pack="'+p.id+'">Gratis eintragen</button>')+'</div>';
   }
   $('#packGrid').innerHTML=PACKS.map(packHTML).join('');
 
   /* Eintragen */
   var form,step;
-  function openSubmit(pack){form={title:'',date:'',time:'',place:'',town:'',cat:'',tend:'',desc:'',price:'',link:'',org:'',credit:'',mail:'',tel:'',pack:(pack==='plus'?'plus':'free'),ai:0,img:'',fly:'',until:''};step=1;renderForm();openScrim('#submitScrim')}
+  function openSubmit(pack){form={title:'',date:'',time:'',place:'',town:'',cat:'',tend:'',desc:'',price:'',link:'',org:'',credit:'',mail:'',tel:'',pack:'free',ai:0,img:'',fly:'',until:''};step=1;renderForm();openScrim('#submitScrim')}
   function steps(){return '<div class="steps">'+[1,2,3,4].map(function(i){return '<i class="'+(i<=step?'on':'')+'"></i>'}).join('')+'</div>'}
   function head(t,sub){return '<div class="sheet-top"><span class="label">Schritt '+step+' von 4</span><button class="x" id="sx" aria-label="Schließen">×</button></div>'+steps()+'<h2>'+t+'</h2><p class="note">'+sub+'</p>'}
   function upl(id,key,title,sub,req){var v=form[key];return '<div class="field"><label for="'+id+'">'+title+(req?' *':'')+'</label>'+(v?'<div class="uplp"><img src="'+v+'" alt="Vorschau"><button type="button" class="btn ghost" data-rm="'+key+'">Entfernen</button></div>':'<label class="upl" for="'+id+'"><span class="ui">↑</span><b>Bild auswählen oder hierher ziehen</b><small>'+sub+'</small></label>')+'<input type="file" id="'+id+'" accept="image/jpeg,image/png,image/webp" hidden></div>'}
@@ -288,22 +289,40 @@
     }
     draw();
   }
+  function tpOpen(id){
+    var old=$('#tpcal');if(old){old.remove();if(old.dataset.for===id)return}
+    var inp=$('#'+id),btn=$('#'+id+'_b'),box=document.createElement('div'),hh='',cur=inp.value;box.id='tpcal';box.className='cal';box.dataset.for=id;btn.parentNode.appendChild(box);
+    var lab=id==='f_tend'?'Optional: Ende wählen':'Uhrzeit wählen';
+    function done(v){inp.value=v;btn.textContent=v?v+' Uhr':lab;box.remove()}
+    function draw(){
+      var h='<div class="tph">'+(hh?'Minute für '+hh+' Uhr':'Stunde')+'</div><div class="tpg">',i;
+      if(!hh){for(i=6;i<30;i++){var x=pad2(i%24);h+='<button type="button" class="tpb'+(cur&&cur.slice(0,2)===x?' on':'')+'" data-h="'+x+'">'+x+'</button>'}}
+      else{for(i=0;i<60;i+=5){var m=pad2(i);h+='<button type="button" class="tpb'+(cur===hh+':'+m?' on':'')+'" data-m="'+m+'">'+m+'</button>'}}
+      h+='</div>'+(hh?'<button type="button" class="calclr" data-back="1">Andere Stunde</button>':'')+(id==='f_tend'&&inp.value?'<button type="button" class="calclr" data-clr="1">Ende entfernen</button>':'');
+      box.innerHTML=h;
+      box.querySelectorAll('[data-h]').forEach(function(b){b.onclick=function(){hh=b.dataset.h;draw()}});
+      box.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){done(hh+':'+b.dataset.m)}});
+      var bk=box.querySelector('[data-back]');if(bk)bk.onclick=function(){hh='';draw()};
+      var cl=box.querySelector('[data-clr]');if(cl)cl.onclick=function(){done('')};
+    }
+    draw();
+  }
   function need(ids){var bad=null;ids.forEach(function(id){var el=$('#'+id),v=el?el.value.trim():'',bx=el&&(el.closest('.field')||el.parentNode);if(bx)bx.classList.toggle('bad',!v);if(!v&&!bad)bad=bx||el});if(bad){bad.scrollIntoView({block:'center',behavior:'smooth'});toast('Bitte alle Pflichtfelder ausfüllen.');setTimeout(function(){toast('')},3500);return false}return true}
   function save(){var m={f_title:'title',f_date:'date',f_time:'time',f_tend:'tend',f_cat:'cat',f_until:'until',f_place:'place',f_town:'town',f_desc:'desc',f_price:'price',f_link:'link',f_org:'org',f_credit:'credit',f_mail:'mail',f_tel:'tel'};Object.keys(m).forEach(function(k){if($('#'+k))form[m[k]]=val(k)});if($('#f_price')){form.priceSet=val('f_price')!=='';form.price=pFmt(val('f_price'))}}
   function renderForm(){
     var s=$('#submitPad'),h='';
     if(step===1){
-      h=head('Wie sichtbar?','Du kannst jetzt gratis starten oder Plus wählen, das ist aktuell ebenfalls gratis.')+
-      '<div class="opt">'+PACKS.map(function(p){var sub=p.id==='free'?'Eintrag in der Liste':p.id==='plus'?'Mit Ticket-Button und mehrtägigen Events':p.id==='top'?'Hervorgehoben und Top-Platzierung auf der Startseite':'Top plus Newsletter und Social, wir melden uns persönlich';return '<button type="button" data-p="'+p.id+'"'+(p.live?'':' disabled class="soon"')+' aria-pressed="'+(form.pack===p.id)+'"><span><b>'+p.name+'</b><small>'+sub+'</small></span><span class="p">'+(!p.live?'Demnächst':p.now!==undefined?'€ '+p.now+' <s>€ '+p.price+'</s>':'€ 0')+'</span></button>'}).join('')+'</div>'+
+      h=head('Wie sichtbar?','Zum Start ist alles gratis, auch Ticket-Link und mehrtägige Events.')+
+      '<div class="opt">'+PACKS.map(function(p){var sub=p.id==='free'?'Startaktion: inklusive Ticket-Link und mehrtägigen Events':p.id==='plus'?'Ticket-Button und mehrtägige Events':p.id==='top'?'Hervorgehoben und Top-Platzierung auf der Startseite':'Top plus Newsletter und Social, wir melden uns persönlich';return '<button type="button" data-p="'+p.id+'"'+(p.live?'':' disabled class="soon"')+' aria-pressed="'+(form.pack===p.id)+'"><span><b>'+p.name+'</b><small>'+sub+'</small></span><span class="p">'+(!p.live?'Demnächst':'€ 0')+'</span></button>'}).join('')+'</div>'+
       '<p class="note">Du kannst ein Paket auch später ändern.</p>'+
       '<div class="nav"><button class="btn" id="next">Weiter</button></div>';
     }else if(step===2){
       h=head('Worum geht’s?',form.ai?'Von der KI ausgelesen. Bitte kurz prüfen, besonders die markierte Uhrzeit.':'Titel, Termin und Ort. Du hast einen Flyer? Schick ihn an info@ewent.at, wir tragen das Event für dich ein.')+
       '<div class="field"><label for="f_title">Titel *</label><input class="in" id="f_title" value="'+esc(form.title)+'" placeholder="z. B. Hofheuriger im Herbst"></div>'+
       '<div class="field"><label for="f_date_b">Datum *</label><button type="button" class="in dpbtn" id="f_date_b" data-dp="f_date">'+(form.date?fmtD(form.date):'Datum wählen')+'</button><input type="hidden" id="f_date" value="'+esc(form.date)+'"></div>'+
-      '<div class="field"><label for="f_th">Beginn *'+(form.ai?' (bitte prüfen)':'')+'</label><div class="tsel'+(form.ai?' flag':'')+'"><select class="in" id="f_th" aria-label="Stunde">'+timeOpts(24,1,(form.time||'').slice(0,2))+'</select><span>:</span><select class="in" id="f_tm" aria-label="Minute">'+timeOpts(60,5,(form.time||'').slice(3,5))+'</select><span class="tu">Uhr</span></div><input type="hidden" id="f_time" value="'+esc(form.time)+'"><div class="tchips">'+['10:00','14:00','18:00','19:30','20:00'].map(function(t){return '<button type="button" class="chip'+(form.time===t?' on':'')+'" data-t="'+t+'">'+t+'</button>'}).join('')+'</div></div>'+
-      '<div class="field"><label for="f_eh">Ende (optional)</label><div class="tsel"><select class="in" id="f_eh" aria-label="Stunde Ende">'+timeOpts(24,1,(form.tend||'').slice(0,2))+'</select><span>:</span><select class="in" id="f_em" aria-label="Minute Ende">'+timeOpts(60,5,(form.tend||'').slice(3,5))+'</select><span class="tu">Uhr</span></div><input type="hidden" id="f_tend" value="'+esc(form.tend||'')+'"></div>'+
-      (form.pack!=='free'?'<div class="field"><label for="f_until_b">Letzter Tag (nur bei mehrtägigen Events)</label><button type="button" class="in dpbtn" id="f_until_b" data-dp="f_until">'+(form.until?fmtD(form.until):'Optional: letzten Tag wählen')+'</button><input type="hidden" id="f_until" value="'+esc(form.until||'')+'"><p class="note" style="margin:6px 0 0">Bei unterschiedlichen Zeiten pro Tag: bitte in die Beschreibung schreiben.</p></div>':'<div class="field"><label>Mehrtägiges Event</label><div class="lockfield">Mehrtägige Events gibt es mit Plus (aktuell gratis). Du kannst es in Schritt 1 wählen.</div></div>')+
+      '<div class="field"><label for="f_time_b">Beginn *'+(form.ai?' (bitte prüfen)':'')+'</label><button type="button" class="in dpbtn'+(form.ai?' flag':'')+'" id="f_time_b" data-tp="f_time">'+(form.time?form.time+' Uhr':'Uhrzeit wählen')+'</button><input type="hidden" id="f_time" value="'+esc(form.time)+'"><div class="tchips">'+['10:00','14:00','18:00','19:30','20:00'].map(function(t){return '<button type="button" class="chip'+(form.time===t?' on':'')+'" data-t="'+t+'">'+t+'</button>'}).join('')+'</div></div>'+
+      '<div class="field"><label for="f_tend_b">Ende (optional)</label><button type="button" class="in dpbtn" id="f_tend_b" data-tp="f_tend">'+(form.tend?form.tend+' Uhr':'Optional: Ende wählen')+'</button><input type="hidden" id="f_tend" value="'+esc(form.tend||'')+'"></div>'+
+      ((form.pack!=='free'||PROMO)?'<div class="field"><label for="f_until_b">Letzter Tag (nur bei mehrtägigen Events)</label><button type="button" class="in dpbtn" id="f_until_b" data-dp="f_until">'+(form.until?fmtD(form.until):'Optional: letzten Tag wählen')+'</button><input type="hidden" id="f_until" value="'+esc(form.until||'')+'"><p class="note" style="margin:6px 0 0">Bei unterschiedlichen Zeiten pro Tag: bitte in die Beschreibung schreiben.</p></div>':'<div class="field"><label>Mehrtägiges Event</label><div class="lockfield">Mehrtägige Events gibt es mit Plus.</div></div>')+
       '<div class="field"><label for="f_place">Location *</label><input class="in" id="f_place" value="'+esc(form.place)+'" placeholder="Name der Location"></div>'+
       '<div class="field"><label for="f_town">Ort *</label><input class="in" id="f_town" list="townlist" value="'+esc(form.town)+'" placeholder="z. B. Krems" autocomplete="off"><datalist id="townlist">'+TOWNS.map(function(t){return '<option value="'+esc(t)+'">'}).join('')+'</datalist></div>'+
       '<div class="field"><label for="f_cat">Kategorie *</label><select class="in" id="f_cat"><option value="">Kategorie wählen</option>'+CATS.map(function(c){return '<option'+(form.cat===c?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select></div>'+
@@ -311,7 +330,7 @@
     }else if(step===3){
       h=head('Mehr Details','Beschreibung, Preis, Link, Foto und Flyer.')+
       '<div class="field"><label for="f_desc">Beschreibung *</label><textarea class="in" id="f_desc" placeholder="Was erwartet die Gäste?">'+esc(form.desc)+'</textarea></div>'+
-      '<div class="field"><label for="f_price">Eintritt *</label><div class="pricebox"><span>€</span><input class="in pin" id="f_price" inputmode="decimal" autocomplete="off" value="'+(form.price==='Gratis'&&form.priceSet?'0':pVal(form.price))+'" placeholder="0 = Eintritt frei"></div><small class="hint">0 = Eintritt frei.</small></div></div>'+(form.pack!=='free'?'<div class="field"><label for="f_link">Ticket-/Anmelde-Link</label><input class="in" id="f_link" inputmode="url" value="'+esc(form.link)+'" placeholder="https://"></div>':'<div class="field"><label>Ticket-/Anmelde-Link</label><div class="lockfield">Der Ticket-Button gehört zu Plus. Du kannst Plus in Schritt 1 wählen (aktuell gratis).</div></div>')+
+      '<div class="field"><label for="f_price">Eintritt *</label><div class="pricebox"><span>€</span><input class="in pin" id="f_price" inputmode="decimal" autocomplete="off" value="'+(form.price==='Gratis'&&form.priceSet?'0':pVal(form.price))+'" placeholder="0 = Eintritt frei"></div><small class="hint">0 = Eintritt frei.</small></div></div>'+((form.pack!=='free'||PROMO)?'<div class="field"><label for="f_link">Ticket-/Anmelde-Link (optional)</label><input class="in" id="f_link" inputmode="url" value="'+esc(form.link)+'" placeholder="https://"></div>':'<div class="field"><label>Ticket-/Anmelde-Link</label><div class="lockfield">Der Ticket-Button gehört zu Plus. Du kannst Plus in Schritt 1 wählen (aktuell gratis).</div></div>')+
       upl('f_img','img','Foto für die Eventansicht','JPG, PNG oder WebP. Ort, Essen oder Stimmung, bitte kein Flyer.',1)+upl('f_fly','fly','Flyer oder Plakat (optional)','Erscheint zusätzlich auf deiner Event-Seite. JPG, PNG oder WebP.',0)+'<div class="field"><label for="f_credit">Bildnachweis (Foto von) *</label><input class="in" id="f_credit" value="'+esc(form.credit)+'" placeholder="Name der Fotografin / des Fotografen"><small class="hint">Mit dem Einreichen bestätigst du, dass du die Rechte am Bild hast.</small></div>'+(form.ai?'<div class="fnote"><b>Dein Flyer ist gespeichert.</b> Er erscheint extra auf der Event-Seite.</div>':'')+
       '<div class="nav"><button class="btn ghost" id="back">Zurück</button><button class="btn" id="next">Weiter</button></div>';
     }else if(step===4){
@@ -322,25 +341,27 @@
       '<div class="nav"><button class="btn ghost" id="back">Zurück</button><button class="btn accent" id="send">Einreichen</button></div>';
     }else{
       var p=PACKS.filter(function(x){return x.id===form.pack})[0];
-      h='<div class="sheet-top"><span class="label">Eingegangen</span><button class="x" id="sx" aria-label="Schließen">×</button></div><div class="done"><div class="ok">✓</div><h2>Danke, wir schauen drüber.</h2><p class="note">„'+esc(form.title||'Dein Event')+'“ ist bei uns eingegangen. '+(form.pack==='plus'?'Paket Plus ist aktuell gratis, Ticket-Button und mehrtägige Events sind dabei. ':'')+'Die Freigabe kommt per Mail.'+'</p>'+'<button class="btn block" id="fin">Fertig</button></div>';
+      h='<div class="sheet-top"><span class="label">Eingegangen</span><button class="x" id="sx" aria-label="Schließen">×</button></div><div class="done"><div class="ok">✓</div><h2>Danke, wir schauen drüber.</h2><p class="note">„'+esc(form.title||'Dein Event')+'“ ist bei uns eingegangen. '+'Die Freigabe kommt per Mail.'+'</p>'+'<button class="btn block" id="fin">Fertig</button></div>';
     }
     s.innerHTML=h;
     var sx=$('#sx');if(sx)sx.onclick=function(){closeScrim('#submitScrim')};
     var n=$('#next');if(n)n.onclick=function(){save();if(step===2&&!need(['f_title','f_date','f_time','f_place','f_town','f_cat']))return;if(step===3&&!need(['f_desc','f_price','f_credit']))return;if(step===3&&!form.img){toast('Bitte lade ein Titelbild hoch.');setTimeout(function(){toast('')},3500);var q=$('#f_img');if(q)q.focus();return}step++;renderForm()};
     var b=$('#back');if(b)b.onclick=function(){save();step--;renderForm()};
     var f=$('#fin');if(f)f.onclick=function(){closeScrim('#submitScrim')};
-    function bindUpl(id,key,max,q){var fi=$('#'+id);if(fi)fi.onchange=function(){var f=fi.files&&fi.files[0];if(!f)return;if(!/^image\/(jpeg|png|webp)$/.test(f.type)){toast('Bitte JPG, PNG oder WebP wählen.');setTimeout(function(){toast('')},3000);fi.value='';return}var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var w=im.width,h=im.height,k=Math.min(1,max/Math.max(w,h)),c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);form[key]=c.toDataURL('image/jpeg',q);URL.revokeObjectURL(u);save();renderForm()};im.onerror=function(){toast('Das Bild konnte nicht gelesen werden.');setTimeout(function(){toast('')},3000)};im.src=u}}
+    function bindUpl(id,key,max,q){var fi=$('#'+id);if(!fi)return;function take(f){if(!f)return;if(!/^image\/(jpeg|png|webp)$/.test(f.type)){toast('Bitte JPG, PNG oder WebP wählen.');setTimeout(function(){toast('')},3000);return}var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var w=im.width,h=im.height,k=Math.min(1,max/Math.max(w,h)),c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);form[key]=c.toDataURL('image/jpeg',q);URL.revokeObjectURL(u);save();renderForm()};im.onerror=function(){toast('Das Bild konnte nicht gelesen werden.');setTimeout(function(){toast('')},3000)};im.src=u}
+      fi.onchange=function(){take(fi.files&&fi.files[0]);fi.value=''};
+      var z=fi.parentNode.querySelector('label.upl');if(z){['dragenter','dragover'].forEach(function(n){z.addEventListener(n,function(e){e.preventDefault();z.classList.add('drag')})});['dragleave','drop'].forEach(function(n){z.addEventListener(n,function(e){e.preventDefault();z.classList.remove('drag')})});z.addEventListener('drop',function(e){var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];take(f)})}}
     bindUpl('f_img','img',1280,0.8);bindUpl('f_fly','fly',1600,0.85);
     s.querySelectorAll('[data-rm]').forEach(function(x){x.onclick=function(){form[x.dataset.rm]='';save();renderForm()}});
-    var sd=$('#send');if(sd)sd.onclick=function(){save();if(!need(['f_org','f_mail','f_tel']))return;if(!/^\S+@\S+\.\S+$/.test(form.mail)){toast('Bitte eine gültige E-Mail angeben.');setTimeout(function(){toast('')},3500);return}if(form.pack==='free'){form.link='';form.until=''}sd.disabled=true;sd.textContent='Wird gesendet …';post('submit',{title:form.title,date:form.date,until:form.until||'',time:form.time,tend:form.tend||'',place:form.place,town:form.town,cat:form.cat,desc:form.desc,price:pFmt(form.price),link:form.link,org:form.org,credit:form.credit||'',mail:form.mail,tel:form.tel,pack:form.pack,img:form.img||'',flyer:form.fly||''}).then(function(){step=5;renderForm()}).catch(function(er){sd.disabled=false;sd.textContent='Einreichen';toast(er.message);setTimeout(function(){toast('')},4000)})};
+    var sd=$('#send');if(sd)sd.onclick=function(){save();if(!need(['f_org','f_mail','f_tel']))return;if(!/^\S+@\S+\.\S+$/.test(form.mail)){toast('Bitte eine gültige E-Mail angeben.');setTimeout(function(){toast('')},3500);return}if(form.pack==='free'&&!PROMO){form.link='';form.until=''}sd.disabled=true;sd.textContent='Wird gesendet …';post('submit',{title:form.title,date:form.date,until:form.until||'',time:form.time,tend:form.tend||'',place:form.place,town:form.town,cat:form.cat,desc:form.desc,price:pFmt(form.price),link:form.link,org:form.org,credit:form.credit||'',mail:form.mail,tel:form.tel,pack:form.pack,img:form.img||'',flyer:form.fly||''}).then(function(){step=5;renderForm()}).catch(function(er){sd.disabled=false;sd.textContent='Einreichen';toast(er.message);setTimeout(function(){toast('')},4000)})};
+    s.querySelectorAll('[data-tp]').forEach(function(b){b.onclick=function(){tpOpen(b.dataset.tp)}});
     s.querySelectorAll('[data-dp]').forEach(function(b){b.onclick=function(){dpOpen(b.dataset.dp)}});
-    var th=$('#f_th'),tm=$('#f_tm');function tset(){var h=th.value,m=tm.value;$('#f_time').value=h?h+':'+(m||'00'):''}if(th&&tm){th.onchange=function(){if(th.value&&!tm.value)tm.value='00';tset()};tm.onchange=tset}
-    var eh=$('#f_eh'),em=$('#f_em');function eset(){var h=eh.value,m=em.value;$('#f_tend').value=h?h+':'+(m||'00'):''}if(eh&&em){eh.onchange=function(){if(eh.value&&!em.value)em.value='00';eset()};em.onchange=eset}
     s.querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){save();form.time=b.dataset.t;renderForm()}});
     var fcat=$('#fcat');if(fcat)CATS.forEach(function(c){fcat.appendChild(mk(c,form.cat===c,'cat',function(){save();form.cat=c;renderForm()}))});
     var ftown=$('#ftown');if(ftown)TOWNS.forEach(function(t){ftown.appendChild(mk(esc(t),form.town===t,'cat',function(){save();form.town=t;renderForm()}))});
     s.querySelectorAll('[data-p]:not([disabled])').forEach(function(c){c.onclick=function(){save();form.pack=c.dataset.p;renderForm()}});
   }
+  ['dragover','drop'].forEach(function(n){window.addEventListener(n,function(e){if(!e.target.closest||!e.target.closest('label.upl'))e.preventDefault()})});
   document.querySelectorAll('[data-open-submit]').forEach(function(b){b.onclick=function(){openSubmit()}});
   document.addEventListener('click',function(ev){var b=ev.target.closest('[data-pack]');if(b)openSubmit(b.dataset.pack)});
 

@@ -63,7 +63,7 @@ $tiers = array( 'free' => 'Gratis', 'plus' => 'Plus', 'top' => 'Top', 'premium' 
 				<div class="two"><div class="field"><label>Preis (z. B. Gratis oder € 12)</label><input class="in" name="price" value="<?php echo esc_attr( $m( '_ew_price' ) ); ?>"></div>
 				<div class="field"><label>Veranstalter</label><input class="in" name="org" value="<?php echo esc_attr( $m( '_ew_org' ) ); ?>"></div><div class="field"><label>Bildnachweis (Foto von)</label><input class="in" name="credit" value="<?php echo esc_attr( $m( '_ew_credit' ) ); ?>" placeholder="leer = Veranstalter"></div></div>
 				<div class="field"><label>Beschreibung</label><textarea class="in" name="desc" rows="5"><?php echo esc_textarea( $ev->post_content ); ?></textarea></div>
-				<?php if ( 'free' !== $tier ) : ?>
+				<?php if ( 'free' !== $tier || apply_filters( 'ewent_start_promo', true ) ) : ?>
 					<div class="field"><label>Ticket-/Anmelde-Link</label><input class="in" name="link" inputmode="url" value="<?php echo esc_attr( $m( '_ew_link' ) ); ?>" placeholder="https://"></div>
 				<?php else : ?>
 					<p class="note" style="margin-bottom:14px">Den Ticket-Button gibt es ab dem Paket Plus.</p>
