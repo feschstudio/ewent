@@ -589,3 +589,7 @@ footer .by .logo-tint{margin-left:0!important;transform:translateY(3px)}
 .uplp img{width:96px;height:72px;object-fit:cover;border-radius:12px;flex:none}
 .opt .p s{color:var(--muted);font-weight:400;font-size:13px;margin-left:4px}
 .evpage .flyer{margin:8px 0 22px}.evpage .flyer h2{font-size:18px;margin:0 0 10px}.evpage .flyer img{width:100%;height:auto;border-radius:var(--r-sm);display:block}
+
+.pgrid{align-items:start!important}
+.pack{height:auto!important}
+.pack .price small{white-space:nowrap}

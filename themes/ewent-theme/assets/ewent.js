@@ -3,8 +3,8 @@
   var TOWNS=['Krems','Stein','Dürnstein','Spitz','Weißenkirchen','Furth bei Göttweig','Langenlois','Gobelsburg','Traismauer','Herzogenburg'];
   var PACKS=[
     {id:'free',name:'Gratis',price:0,live:1,items:[['Eintrag in der Liste',1],['Ticket-Button',0],['Mehrtägige Events',0],['Hervorgehoben in der Liste',0],['Top-Platzierung Startseite',0],['Newsletter-Erwähnung',0],['Social-Post von fesch.',0]]},
-    {id:'plus',name:'Plus',price:19,now:0,live:1,items:[['Eintrag in der Liste',1],['Ticket-Button',1],['Mehrtägige Events',1],['Hervorgehoben in der Liste',0],['Top-Platzierung Startseite',0],['Newsletter-Erwähnung',0],['Social-Post von fesch.',0]]},
-    {id:'top',name:'Top',price:49,hot:1,items:[['Eintrag in der Liste',1],['Ticket-Button',1],['Mehrtägige Events',1],['Hervorgehoben in der Liste',1],['Top-Platzierung Startseite',1],['Newsletter-Erwähnung',0],['Social-Post von fesch.',0]]},
+    {id:'plus',name:'Plus',price:19,now:0,live:1,hot:1,items:[['Eintrag in der Liste',1],['Ticket-Button',1],['Mehrtägige Events',1],['Hervorgehoben in der Liste',0],['Top-Platzierung Startseite',0],['Newsletter-Erwähnung',0],['Social-Post von fesch.',0]]},
+    {id:'top',name:'Top',price:49,items:[['Eintrag in der Liste',1],['Ticket-Button',1],['Mehrtägige Events',1],['Hervorgehoben in der Liste',1],['Top-Platzierung Startseite',1],['Newsletter-Erwähnung',0],['Social-Post von fesch.',0]]},
     {id:'premium',name:'Premium',price:89,items:[['Eintrag in der Liste',1],['Ticket-Button',1],['Mehrtägige Events',1],['Hervorgehoben in der Liste',1],['Top-Platzierung Startseite',1],['Newsletter-Erwähnung',1],['Social-Post von fesch.',1],['Wir melden uns persönlich und besprechen die Inhalte mit dir',1]]}
   ];
 
@@ -254,8 +254,8 @@
   function ics(e){var p=function(n){return (n<10?'0':'')+n},h=e.t.split(':'),ymd=e.date.getFullYear()+p(e.date.getMonth()+1)+p(e.date.getDate()),st=ymd+'T'+h[0]+h[1]+'00',en=ymd+'T'+p((+h[0]+2)%24)+h[1]+'00';return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ewent.//DE','BEGIN:VEVENT','UID:'+e.i+'@ewent.','DTSTAMP:'+st,'DTSTART:'+st,'DTEND:'+en,'SUMMARY:'+e.title,'LOCATION:'+e.place+', '+e.town,'DESCRIPTION:'+e.desc,'END:VEVENT','END:VCALENDAR'].join('\r\n')}
   function packHTML(p){
     return '<div class="pack'+(p.hot?' hot':'')+(p.live?'':' soon')+'"><div class="row"><h3>'+p.name+'</h3>'+(p.hot?'<span class="badge">Beliebt</span>':'')+'</div>'+
-      '<div class="price">€ '+(p.now!==undefined?p.now:p.price)+' <small>'+(p.now!==undefined?'statt € '+p.price+' · aktuell gratis':'pro Event')+'</small></div><ul>'+p.items.filter(function(i){return i[1]}).map(function(i){return '<li>'+i[0].replace('fesch.','ewent.')+'</li>'}).join('')+'</ul>'+
-      (!p.live?'<button class="btn ghost block" disabled>Demnächst verfügbar</button>':'<button class="btn '+(p.id==='plus'?'accent':'ghost')+' block" data-pack="'+p.id+'">'+(p.id==='free'?'Gratis eintragen':'Plus wählen')+'</button>')+'</div>';
+      '<div class="price">€ '+(p.now!==undefined?p.now:p.price)+' <small>'+(p.now!==undefined?'statt € '+p.price:'pro Event')+'</small></div><ul>'+p.items.filter(function(i){return i[1]}).map(function(i){return '<li>'+i[0].replace('fesch.','ewent.')+'</li>'}).join('')+'</ul>'+
+      (!p.live?'<button class="btn ghost block" disabled>Demnächst verfügbar</button>':'<button class="btn '+(p.hot?'accent':'ghost')+' block" data-pack="'+p.id+'">'+(p.id==='free'?'Gratis eintragen':'Plus wählen')+'</button>')+'</div>';
   }
   $('#packGrid').innerHTML=PACKS.map(packHTML).join('');
 
