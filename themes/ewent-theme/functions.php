@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.37' );
+define( 'EWENT_THEME_VERSION', '0.7.38' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -27,7 +27,7 @@ add_filter( 'script_loader_tag', function ( $tag, $handle ) {
 }, 10, 2 );
 
 function ewent_theme_data() {
-	$events = function_exists( 'ewent_occurrences' ) ? ewent_occurrences( array( 'limit' => 500 ) ) : array();
+	$events = ( ewent_is_home() && function_exists( 'ewent_occurrences' ) ) ? ewent_occurrences( array( 'limit' => 500 ) ) : array();
 	return array(
 		'rest'   => esc_url_raw( rest_url( 'ewent/v1/' ) ),
 		'home'   => home_url( '/' ),
@@ -36,12 +36,16 @@ function ewent_theme_data() {
 			'blink' => (string) get_option( 'ewent_banner_link', '' ),
 			'wk'   => ewent_picks(),
 		),
-		'events' => ewent_is_home() ? $events : array(),
+		'events' => $events,
 	);
 }
 
 add_action( 'wp_head', function () {
 	$i = get_template_directory_uri() . '/assets/icons/';
+	$fo = get_template_directory_uri() . '/assets/fonts/';
+	foreach ( array( 'bricolage-grotesque-latin-wght-normal', 'dm-sans-latin-400-normal', 'dm-sans-latin-500-normal' ) as $fn ) {
+		echo '<link rel="preload" href="' . esc_url( $fo . $fn . '.woff2' ) . '" as="font" type="font/woff2" crossorigin>' . "\n";
+	}
 	echo '<meta name="theme-color" content="#F6F3E8">' . "\n";
 	echo '<link rel="icon" type="image/png" sizes="32x32" href="' . esc_url( $i . 'favicon-32.png' ) . '">' . "\n";
 	echo '<link rel="icon" type="image/png" sizes="64x64" href="' . esc_url( $i . 'favicon-64.png' ) . '">' . "\n";

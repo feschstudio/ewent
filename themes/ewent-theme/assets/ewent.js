@@ -16,13 +16,13 @@
   var DOWL=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
   var base=new Date();base.setHours(0,0,0,0);
   var RAW=(window.EWENT&&window.EWENT.events)||[];
-  var EV=RAW.map(function(r){var p=r.date.split('-'),d=new Date(+p[0],+p[1]-1,+p[2]);return {id:r.id,url:r.url,ds:r.date,t:r.time||'',title:r.title,place:r.place||'',town:r.town||'',cat:r.cat||'',price:r.price||'Gratis',tier:r.tier||'free',org:r.org||'',credit:r.credit||'',desc:r.excerpt||'',link:r.link||'',image:r.image||'',manual:r.manual?1:0,multi:!!r.multi,dates:r.dates||[[r.date,r.time]],last:r.last,date:d,d:Math.round((d-base)/864e5)}}).filter(function(r){return r.d>=0}).sort(function(a,b){return a.d-b.d||a.t.localeCompare(b.t)});
+  var EV=RAW.map(function(r){var p=r.date.split('-'),d=new Date(+p[0],+p[1]-1,+p[2]);return {id:r.id,url:r.url,ds:r.date,t:r.time||'',title:r.title,place:r.place||'',town:r.town||'',cat:r.cat||'',price:r.price||'Gratis',tier:r.tier||'free',org:r.org||'',credit:r.credit||'',desc:r.excerpt||'',link:r.link||'',image:r.image||'',thumb:r.thumb||r.image||'',manual:r.manual?1:0,multi:!!r.multi,dates:r.dates||[[r.date,r.time]],last:r.last,date:d,d:Math.round((d-base)/864e5)}}).filter(function(r){return r.d>=0}).sort(function(a,b){return a.d-b.d||a.t.localeCompare(b.t)});
   EV.forEach(function(e,i){e.i=i;e.long=e.multi&&(function(){var u={};e.dates.forEach(function(x){u[x[0]]=1});return Object.keys(u).length>=3})();e.hay=(e.title+' '+e.place+' '+e.town+' '+e.org+' '+e.cat+' '+e.desc).toLowerCase()});
 
   var F={q:'',time:'all',date:'',cats:[],towns:[],free:false};
   var $=function(s){return document.querySelector(s)};
   var C=(window.EWENT&&window.EWENT.config)||{},S={banner:!!C.btxt};
-  function thumb(e){return e.image?'<img src="'+esc(e.image)+'" alt="" loading="lazy">':art(e)}
+  function thumb(e){return e.image?'<img src="'+esc(e.thumb||e.image)+'" alt="" loading="lazy" decoding="async">':art(e)}
   function post(route,data){return fetch(((window.EWENT&&window.EWENT.rest)||'/wp-json/ewent/v1/')+route,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j&&j.message||'Das hat leider nicht geklappt. Bitte versuch es nochmal.');return j})})}
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function days(e){return Math.round((e.date-base)/864e5)}
