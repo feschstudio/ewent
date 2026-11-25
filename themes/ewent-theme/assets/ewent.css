@@ -586,3 +586,18 @@ footer .by .logo-tint{margin-left:0!important;transform:translateY(3px)}
 .pack .price{line-height:1.1}
 .pack .psub{color:var(--muted);font-size:13px;margin:-10px 0 0}
 .pack .price .was{margin-right:10px}
+.dpbtn{display:flex;align-items:center;text-align:left;width:100%;min-height:56px;cursor:pointer;color:var(--ink)}
+.tsel{display:flex;align-items:center;gap:8px}.tsel select.in{flex:1;min-width:0;text-align:center;text-align-last:center;min-height:56px;padding:0 10px;appearance:none;-webkit-appearance:none;background:#fff}
+.tsel span{color:var(--muted);font-weight:500}.tsel .tu{font-size:14px;margin-left:4px}
+.tchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tchips .chip{min-height:40px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font-size:15px}
+.tchips .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.cal{margin-top:10px;padding:14px;border:1.5px solid var(--line);border-radius:var(--r-sm);background:var(--card)}
+.calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.calh b{font-weight:500;font-size:17px}
+.calnav{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:22px;line-height:1}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.calg i{font-style:normal;font-size:12px;color:var(--muted);padding:4px 0}
+.cald{aspect-ratio:1;min-height:44px;border-radius:12px;border:1.5px solid transparent;background:none;font-size:16px}
+.cald.today{border-color:var(--line)}.cald.on{background:var(--accent);color:#fff}.cald:disabled{color:#c9c4b8}
+.calclr{display:block;width:100%;margin-top:10px;min-height:44px;background:none;border:0;color:var(--accent);font-weight:500}
+input[type=date].in,input[type=time].in{display:flex;align-items:center;min-height:56px}

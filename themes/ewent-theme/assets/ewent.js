@@ -270,6 +270,24 @@
   function pFmt(r){r=(r||'').replace(/[^\d,]/g,'');return !r||/^0+(,0*)?$/.test(r)?'Gratis':'€ '+r}
   document.addEventListener('input',function(ev){var t=ev.target;if(t.classList&&t.classList.contains('pin')){var v=t.value.replace(/[.]/g,',').replace(/[^\d,]/g,'');var i=v.indexOf(',');if(i>=0)v=v.slice(0,i+1)+v.slice(i+1).replace(/,/g,'').slice(0,2);t.value=v}});
   function val(id){var el=$('#'+id);return el?el.value.trim():''}
+  function fmtD(v){var d=new Date(v+'T12:00:00');return DOW[d.getDay()]+', '+d.getDate()+'. '+MON[d.getMonth()]+' '+d.getFullYear()}
+  function timeOpts(n,st,sel){var o='<option value="">--</option>',i,v;for(i=0;i<n;i+=st){v=pad2(i);o+='<option value="'+v+'"'+(v===sel?' selected':'')+'>'+v+'</option>'}return o}
+  var MONF=['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  function dpOpen(id){
+    var box=$('#dpcal');if(box){box.remove();if(box.dataset.for===id)return}
+    var inp=$('#'+id),btn=$('#'+id+'_b'),min=id==='f_until'?($('#f_date').value||iso(base)):iso(base),cur=inp.value||min,m=dd(cur>min?cur:min);m.setDate(1);
+    box=document.createElement('div');box.id='dpcal';box.className='cal';box.dataset.for=id;btn.parentNode.appendChild(box);
+    function draw(){
+      var y=m.getFullYear(),mo=m.getMonth(),first=(new Date(y,mo,1).getDay()+6)%7,days=new Date(y,mo+1,0).getDate(),h='<div class="calh"><button type="button" class="calnav" data-n="-1" aria-label="Voriger Monat">‹</button><b>'+MONF[mo]+' '+y+'</b><button type="button" class="calnav" data-n="1" aria-label="Nächster Monat">›</button></div><div class="calg">'+['Mo','Di','Mi','Do','Fr','Sa','So'].map(function(x){return '<i>'+x+'</i>'}).join(''),i,v;
+      for(i=0;i<first;i++)h+='<span></span>';
+      for(i=1;i<=days;i++){v=y+'-'+pad2(mo+1)+'-'+pad2(i);h+='<button type="button" class="cald'+(v===inp.value?' on':'')+(v===iso(base)?' today':'')+'" data-v="'+v+'"'+(v<min?' disabled':'')+'>'+i+'</button>'}
+      h+='</div>'+(id==='f_until'&&inp.value?'<button type="button" class="calclr" data-v="">Letzten Tag entfernen</button>':'');
+      box.innerHTML=h;
+      box.querySelectorAll('.calnav').forEach(function(b){b.onclick=function(){m.setMonth(m.getMonth()+(+b.dataset.n));draw()}});
+      box.querySelectorAll('[data-v]').forEach(function(b){b.onclick=function(){var v=b.dataset.v;inp.value=v;btn.textContent=v?fmtD(v):(id==='f_until'?'Optional: letzten Tag wählen':'Datum wählen');if(id==='f_date'){var u=$('#f_until');if(u&&u.value&&u.value<=v){u.value='';var ub=$('#f_until_b');if(ub)ub.textContent='Optional: letzten Tag wählen'}}box.remove()}});
+    }
+    draw();
+  }
   function save(){var m={f_title:'title',f_date:'date',f_time:'time',f_until:'until',f_place:'place',f_town:'town',f_desc:'desc',f_price:'price',f_link:'link',f_org:'org',f_credit:'credit',f_mail:'mail',f_tel:'tel'};Object.keys(m).forEach(function(k){if($('#'+k))form[m[k]]=val(k)});if($('#f_price'))form.price=pFmt(val('f_price'))}
   function renderForm(){
     var s=$('#submitPad'),h='';
@@ -281,8 +299,9 @@
     }else if(step===2){
       h=head('Worum geht’s?',form.ai?'Von der KI ausgelesen. Bitte kurz prüfen, besonders die markierte Uhrzeit.':'Titel, Termin und Ort. Du hast einen Flyer? Schick ihn an info@ewent.at, wir tragen das Event für dich ein.')+
       '<div class="field"><label for="f_title">Titel</label><input class="in" id="f_title" value="'+esc(form.title)+'" placeholder="z. B. Hofheuriger im Herbst"></div>'+
-      '<div class="two dt"><div class="field"><label for="f_date">Datum</label><input class="in" id="f_date" type="date" value="'+esc(form.date)+'"></div><div class="field"><label for="f_time">Beginn</label><input class="in'+(form.ai?' flag':'')+'" id="f_time" type="time" value="'+esc(form.time)+'"></div></div>'+
-      (form.pack!=='free'?'<div class="field"><label for="f_until">Letzter Tag (nur bei mehrtägigen Events)</label><input class="in" id="f_until" type="date" value="'+esc(form.until||'')+'"><p class="note" style="margin:6px 0 0">Bei unterschiedlichen Zeiten pro Tag: bitte in die Beschreibung schreiben.</p></div>':'<div class="field"><label>Mehrtägiges Event</label><div class="lockfield">Mehrtägige Events gibt es mit Plus (aktuell gratis). Du kannst es in Schritt 1 wählen.</div></div>')+
+      '<div class="field"><label for="f_date_b">Datum</label><button type="button" class="in dpbtn" id="f_date_b" data-dp="f_date">'+(form.date?fmtD(form.date):'Datum wählen')+'</button><input type="hidden" id="f_date" value="'+esc(form.date)+'"></div>'+
+      '<div class="field"><label for="f_th">Beginn'+(form.ai?' (bitte prüfen)':'')+'</label><div class="tsel'+(form.ai?' flag':'')+'"><select class="in" id="f_th" aria-label="Stunde">'+timeOpts(24,1,(form.time||'').slice(0,2))+'</select><span>:</span><select class="in" id="f_tm" aria-label="Minute">'+timeOpts(60,5,(form.time||'').slice(3,5))+'</select><span class="tu">Uhr</span></div><input type="hidden" id="f_time" value="'+esc(form.time)+'"><div class="tchips">'+['10:00','14:00','18:00','19:30','20:00'].map(function(t){return '<button type="button" class="chip'+(form.time===t?' on':'')+'" data-t="'+t+'">'+t+'</button>'}).join('')+'</div></div>'+
+      (form.pack!=='free'?'<div class="field"><label for="f_until_b">Letzter Tag (nur bei mehrtägigen Events)</label><button type="button" class="in dpbtn" id="f_until_b" data-dp="f_until">'+(form.until?fmtD(form.until):'Optional: letzten Tag wählen')+'</button><input type="hidden" id="f_until" value="'+esc(form.until||'')+'"><p class="note" style="margin:6px 0 0">Bei unterschiedlichen Zeiten pro Tag: bitte in die Beschreibung schreiben.</p></div>':'<div class="field"><label>Mehrtägiges Event</label><div class="lockfield">Mehrtägige Events gibt es mit Plus (aktuell gratis). Du kannst es in Schritt 1 wählen.</div></div>')+
       '<div class="field"><label for="f_place">Location</label><input class="in" id="f_place" value="'+esc(form.place)+'" placeholder="Name der Location"></div>'+
       '<div class="field"><label for="f_town">Ort</label><input class="in" id="f_town" list="townlist" value="'+esc(form.town)+'" placeholder="z. B. Krems" autocomplete="off"><datalist id="townlist">'+TOWNS.map(function(t){return '<option value="'+esc(t)+'">'}).join('')+'</datalist></div>'+
       '<div class="field"><label>Kategorie</label><div class="wrapchips" id="fcat"></div></div>'+
@@ -312,6 +331,9 @@
     bindUpl('f_img','img',1280,0.8);bindUpl('f_fly','fly',1600,0.85);
     s.querySelectorAll('[data-rm]').forEach(function(x){x.onclick=function(){form[x.dataset.rm]='';save();renderForm()}});
     var sd=$('#send');if(sd)sd.onclick=function(){save();if(form.pack==='free'){form.link='';form.until=''}sd.disabled=true;sd.textContent='Wird gesendet …';post('submit',{title:form.title,date:form.date,until:form.until||'',time:form.time,place:form.place,town:form.town,cat:form.cat,desc:form.desc,price:pFmt(form.price),link:form.link,org:form.org,credit:form.credit||'',mail:form.mail,tel:form.tel,pack:form.pack,img:form.img||'',flyer:form.fly||''}).then(function(){step=5;renderForm()}).catch(function(er){sd.disabled=false;sd.textContent='Einreichen';toast(er.message);setTimeout(function(){toast('')},4000)})};
+    s.querySelectorAll('[data-dp]').forEach(function(b){b.onclick=function(){dpOpen(b.dataset.dp)}});
+    var th=$('#f_th'),tm=$('#f_tm');function tset(){var h=th.value,m=tm.value;$('#f_time').value=h?h+':'+(m||'00'):''}if(th&&tm){th.onchange=function(){if(th.value&&!tm.value)tm.value='00';tset()};tm.onchange=tset}
+    s.querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){save();form.time=b.dataset.t;renderForm()}});
     var fcat=$('#fcat');if(fcat)CATS.forEach(function(c){fcat.appendChild(mk(c,form.cat===c,'cat',function(){save();form.cat=c;renderForm()}))});
     var ftown=$('#ftown');if(ftown)TOWNS.forEach(function(t){ftown.appendChild(mk(esc(t),form.town===t,'cat',function(){save();form.town=t;renderForm()}))});
     s.querySelectorAll('[data-p]:not([disabled])').forEach(function(c){c.onclick=function(){save();form.pack=c.dataset.p;renderForm()}});
