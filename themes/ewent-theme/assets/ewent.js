@@ -345,7 +345,7 @@
       '<div class="nav"><button class="btn ghost" id="back">Zurück</button><button class="btn accent" id="send">Einreichen</button></div>';
     }else{
       var p=PACKS.filter(function(x){return x.id===form.pack})[0];
-      h='<div class="sheet-top"><span class="label">Eingegangen</span><button class="x" id="sx" aria-label="Schließen">×</button></div><div class="done"><div class="ok">✓</div><h2>Danke, wir schauen drüber.</h2><p class="note">„'+esc(form.title||'Dein Event')+'“ ist bei uns eingegangen. '+'Die Freigabe kommt per Mail.'+'</p>'+'<button class="btn block" id="fin">Fertig</button></div>';
+      h='<div class="sheet-top"><span class="label">Eingegangen</span><button class="x" id="sx" aria-label="Schließen">×</button></div><div class="done"><div class="ok">✓</div><h2>Danke, dein Event ist online.</h2><p class="note">„'+esc(form.title||'Dein Event')+'“ ist jetzt auf ewent. zu sehen. '+'Wir schauen noch kurz drüber und melden uns, falls etwas fehlt.'+'</p>'+'<button class="btn block" id="fin">Fertig</button></div>';
     }
     s.innerHTML=h;
     var sx=$('#sx');if(sx)sx.onclick=function(){closeScrim('#submitScrim')};

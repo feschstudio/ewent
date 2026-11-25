@@ -134,10 +134,15 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 		error_log( 'ewent image: ' . $e->getMessage() );
 	}
 
+	// Automatisch live, sobald das Titelbild gespeichert ist (abschaltbar: add_filter( 'ewent_autopublish', '__return_false' )).
+	$live = false;
+	if ( apply_filters( 'ewent_autopublish', true ) && has_post_thumbnail( $id ) ) {
+		$live = ! is_wp_error( wp_update_post( array( 'ID' => $id, 'post_status' => 'publish' ), true ) );
+	}
 	wp_mail(
 		ewent_notify_email(),
-		'Neues Event zur Freigabe: ' . $title,
-		"Es wurde ein neues Event eingereicht.\n\nTitel: {$title}\nVeranstalter: {$mail}\n\nFreigeben: " . admin_url( 'post.php?post=' . $id . '&action=edit' )
+		( $live ? 'Neues Event ist live: ' : 'Neues Event zur Freigabe: ' ) . $title,
+		"Es wurde ein neues Event eingereicht.\n\nTitel: {$title}\nVeranstalter: {$mail}\n\n" . ( $live ? 'Ansehen: ' . get_permalink( $id ) . "\nBearbeiten oder zurückziehen: " : 'Freigeben: ' ) . admin_url( 'post.php?post=' . $id . '&action=edit' )
 	);
 	return rest_ensure_response( array( 'ok' => true ) );
 }
