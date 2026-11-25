@@ -619,4 +619,3 @@ select.in{appearance:none;-webkit-appearance:none;background:#fff url("data:imag
 .snap .chipbadge{top:auto!important;bottom:14px;right:auto!important;left:14px}
 .snap .chipdate{max-width:calc(100% - 28px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .snap.sm .chipbadge{bottom:8px;left:8px}
-@media(min-width:1024px){.list .ev{display:flex;flex-direction:column;justify-content:flex-start}}
