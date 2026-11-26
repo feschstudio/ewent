@@ -17,8 +17,62 @@ function ewent_rate_limited( $bucket, $max, $window = HOUR_IN_SECONDS ) {
 
 function ewent_notify_email() {
 	$m = get_option( 'ewent_notify_email' );
-	return is_email( $m ) ? $m : get_option( 'admin_email' );
+	return is_email( $m ) ? $m : 'info@ewent.at';
 }
+
+/** Cloudflare Turnstile: nur aktiv, wenn EWENT_TURNSTILE_SITE und EWENT_TURNSTILE_SECRET in der wp-config.php stehen. */
+function ewent_turnstile_on() {
+	return defined( 'EWENT_TURNSTILE_SITE' ) && defined( 'EWENT_TURNSTILE_SECRET' ) && EWENT_TURNSTILE_SITE && EWENT_TURNSTILE_SECRET;
+}
+
+function ewent_turnstile_ok( $token ) {
+	if ( ! $token || ! is_string( $token ) ) {
+		return false;
+	}
+	$res = wp_remote_post( 'https://challenges.cloudflare.com/turnstile/v0/siteverify', array(
+		'timeout' => 8,
+		'body'    => array(
+			'secret'   => EWENT_TURNSTILE_SECRET,
+			'response' => $token,
+			'remoteip' => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '',
+		),
+	) );
+	if ( is_wp_error( $res ) ) {
+		return false;
+	}
+	$j = json_decode( wp_remote_retrieve_body( $res ), true );
+	return ! empty( $j['success'] );
+}
+
+/** Wegwerf-Mailadressen werden abgelehnt. */
+function ewent_disposable_mail( $mail ) {
+	$d = strtolower( substr( strrchr( (string) $mail, '@' ), 1 ) );
+	$bad = array( 'mailinator.com', 'guerrillamail.com', '10minutemail.com', 'tempmail.com', 'temp-mail.org', 'yopmail.com', 'trashmail.com', 'sharklasers.com', 'getnada.com', 'maildrop.cc', 'dispostable.com', 'fakeinbox.com', 'throwawaymail.com', 'mailnesia.com', 'mohmal.com' );
+	return in_array( $d, $bad, true );
+}
+
+/** Hinweise an den Admin werden gesammelt und einmal täglich als ein Mail geschickt. */
+function ewent_queue_notice( $line ) {
+	$q   = get_option( 'ewent_notice_queue', array() );
+	$q   = is_array( $q ) ? $q : array();
+	$q[] = wp_date( 'd.m. H:i' ) . '  ' . $line;
+	update_option( 'ewent_notice_queue', array_slice( $q, -200 ), false );
+}
+
+add_action( 'init', function () {
+	if ( ! wp_next_scheduled( 'ewent_notice_digest' ) ) {
+		wp_schedule_event( strtotime( 'tomorrow 06:30 ' . wp_timezone_string() ), 'daily', 'ewent_notice_digest' );
+	}
+} );
+
+add_action( 'ewent_notice_digest', function () {
+	$q = get_option( 'ewent_notice_queue', array() );
+	if ( ! is_array( $q ) || ! $q ) {
+		return;
+	}
+	update_option( 'ewent_notice_queue', array(), false );
+	wp_mail( ewent_notify_email(), 'ewent.: ' . count( $q ) . ' neue Einreichung(en)', "Zusammenfassung der letzten 24 Stunden:\n\n" . implode( "\n", $q ) . "\n\nAlle Events: " . admin_url( 'edit.php?post_type=ewent_event' ) );
+} );
 
 add_action( 'rest_api_init', function () {
 	register_rest_route( 'ewent/v1', '/events', array(
@@ -61,6 +115,17 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	if ( ! empty( $p['website'] ) ) {
 		return rest_ensure_response( array( 'ok' => true ) );
 	}
+	// Echte Menschen brauchen für das Formular länger als ein paar Sekunden.
+	if ( (int) ( $p['el'] ?? 0 ) < 15 ) {
+		return new WP_Error( 'ewent_fast', 'Bitte versuch es noch einmal.', array( 'status' => 400 ) );
+	}
+	$ts_ok = false;
+	if ( ewent_turnstile_on() ) {
+		$ts_ok = ewent_turnstile_ok( $p['cf'] ?? '' );
+		if ( ! $ts_ok ) {
+			return new WP_Error( 'ewent_bot', 'Die Sicherheitsprüfung hat nicht geklappt. Bitte lade die Seite neu und versuch es nochmal.', array( 'status' => 400 ) );
+		}
+	}
 	$title = sanitize_text_field( $p['title'] ?? '' );
 	$date  = sanitize_text_field( $p['date'] ?? '' );
 	$time  = sanitize_text_field( $p['time'] ?? '' );
@@ -76,6 +141,9 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 	}
 	if ( '' === $title || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) || ! preg_match( '/^\d{2}:\d{2}$/', $time ) || ! in_array( $cat0, EWENT_CATS, true ) || ! is_email( $mail ) ) {
 		return new WP_Error( 'ewent_invalid', 'Bitte alle Pflichtfelder ausfüllen und eine gültige E-Mail angeben.', array( 'status' => 400 ) );
+	}
+	if ( ewent_disposable_mail( $mail ) ) {
+		return new WP_Error( 'ewent_mail', 'Bitte gib eine echte E-Mail-Adresse an.', array( 'status' => 400 ) );
 	}
 	$pack = sanitize_text_field( $p['pack'] ?? 'free' );
 	$pack = in_array( $pack, array( 'free', 'plus', 'top', 'premium' ), true ) ? $pack : 'free';
@@ -134,17 +202,24 @@ function ewent_rest_submit( WP_REST_Request $r ) {
 		error_log( 'ewent image: ' . $e->getMessage() );
 	}
 
-	// Automatisch live, sobald das Titelbild gespeichert ist (abschaltbar: add_filter( 'ewent_autopublish', '__return_false' )).
+	// Automatisch live: nur mit Titelbild, ohne Links im Text und wenn entweder die Sicherheitsprüfung
+	// bestanden ist oder die Adresse schon früher einen veröffentlichten Eintrag hatte.
+	$text  = $title . ' ' . ( $p['desc'] ?? '' ) . ' ' . ( $p['org'] ?? '' ) . ' ' . ( $p['place'] ?? '' );
+	$links = (bool) preg_match( '#https?://|www\.|\.(com|net|ru|xyz|top|info)\b#i', $text );
+	$known = (bool) get_posts( array(
+		'post_type'      => 'ewent_event',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'fields'         => 'ids',
+		'post__not_in'   => array( $id ),
+		'meta_query'     => array( array( 'key' => '_ew_owner_email', 'value' => $mail ) ),
+	) );
 	$live = false;
-	if ( apply_filters( 'ewent_autopublish', true ) && has_post_thumbnail( $id ) ) {
+	if ( apply_filters( 'ewent_autopublish', true ) && ! $links && ( $ts_ok || $known ) && has_post_thumbnail( $id ) ) {
 		$live = ! is_wp_error( wp_update_post( array( 'ID' => $id, 'post_status' => 'publish' ), true ) );
 	}
-	wp_mail(
-		ewent_notify_email(),
-		( $live ? 'Neues Event ist live: ' : 'Neues Event zur Freigabe: ' ) . $title,
-		"Es wurde ein neues Event eingereicht.\n\nTitel: {$title}\nVeranstalter: {$mail}\n\n" . ( $live ? 'Ansehen: ' . get_permalink( $id ) . "\nBearbeiten oder zurückziehen: " : 'Freigeben: ' ) . admin_url( 'post.php?post=' . $id . '&action=edit' )
-	);
-	return rest_ensure_response( array( 'ok' => true ) );
+	ewent_queue_notice( ( $live ? 'LIVE      ' : 'PRÜFEN    ' ) . $title . ' · ' . $mail . ' · ' . admin_url( 'post.php?post=' . $id . '&action=edit' ) );
+	return rest_ensure_response( array( 'ok' => true, 'live' => $live ) );
 }
 
 function ewent_rest_claim( WP_REST_Request $r ) {

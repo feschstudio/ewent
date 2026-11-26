@@ -22,7 +22,7 @@
 
   var F={q:'',time:'all',date:'',cats:[],towns:[],free:false};
   var $=function(s){return document.querySelector(s)};
-  var MORE=false,C=(window.EWENT&&window.EWENT.config)||{},S={banner:!!C.btxt};
+  var T0=Date.now(),TS='',MORE=false,C=(window.EWENT&&window.EWENT.config)||{},S={banner:!!C.btxt};
   function thumb(e){return e.image?'<img src="'+esc(e.thumb||e.image)+'" alt="" loading="lazy" decoding="async">':art(e)}
   function post(route,data){return fetch(((window.EWENT&&window.EWENT.rest)||'/wp-json/ewent/v1/')+route,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok)throw new Error(j&&j.message||'Das hat leider nicht geklappt. Bitte versuch es nochmal.');return j})})}
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -341,11 +341,11 @@
       h=head('Wer lädt ein?','Für Rückfragen. Deine Adresse wird nicht veröffentlicht.')+
       '<div class="field"><label for="f_org">Veranstalter *</label><input class="in" id="f_org" value="'+esc(form.org)+'" placeholder="Name oder Verein"></div>'+
       '<div class="two"><div class="field"><label for="f_mail">E-Mail *</label><input class="in" id="f_mail" type="email" value="'+esc(form.mail)+'"></div><div class="field"><label for="f_tel">Telefon *</label><input class="in" id="f_tel" type="tel" value="'+esc(form.tel)+'"></div></div>'+
-      '<p class="note">Du bist für Inhalt und Bildrechte deines Eintrags verantwortlich, nicht ewent. bzw. der Betreiber der Website.</p><p class="note">Wir prüfen jeden neuen Eintrag und schalten ihn meist innerhalb eines Tages frei.</p>'+
-      '<div class="nav"><button class="btn ghost" id="back">Zurück</button><button class="btn accent" id="send">Einreichen</button></div>';
+      '<p class="note">Du bist für Inhalt und Bildrechte deines Eintrags verantwortlich, nicht ewent. bzw. der Betreiber der Website.</p><p class="note">Dein Eintrag geht meist sofort online. Wenn wir ihn noch prüfen, schalten wir ihn innerhalb eines Tages frei.</p>'+
+      (C.ts?'<div id="tsBox" style="margin:6px 0 14px;min-height:65px"></div>':'')+'<div class="nav"><button class="btn ghost" id="back">Zurück</button><button class="btn accent" id="send">Einreichen</button></div>';
     }else{
       var p=PACKS.filter(function(x){return x.id===form.pack})[0];
-      h='<div class="sheet-top"><span class="label">Eingegangen</span><button class="x" id="sx" aria-label="Schließen">×</button></div><div class="done"><div class="ok">✓</div><h2>Danke, dein Event ist online.</h2><p class="note">„'+esc(form.title||'Dein Event')+'“ ist jetzt auf ewent. zu sehen. '+'Wir schauen noch kurz drüber und melden uns, falls etwas fehlt.'+'</p>'+'<button class="btn block" id="fin">Fertig</button></div>';
+      h='<div class="sheet-top"><span class="label">Eingegangen</span><button class="x" id="sx" aria-label="Schließen">×</button></div><div class="done"><div class="ok">✓</div><h2>'+(form.live?'Danke, dein Event ist online.':'Danke, wir schauen drüber.')+'</h2><p class="note">„'+esc(form.title||'Dein Event')+'“ '+(form.live?'ist jetzt auf ewent. zu sehen. Wir schauen noch kurz drüber und melden uns, falls etwas fehlt.':'ist bei uns eingegangen. Wir schalten es meist innerhalb eines Tages frei.')+'</p>'+'<button class="btn block" id="fin">Fertig</button></div>';
     }
     s.innerHTML=h;
     var sx=$('#sx');if(sx)sx.onclick=function(){closeScrim('#submitScrim')};
@@ -357,7 +357,8 @@
       var z=fi.parentNode.querySelector('label.upl');if(z){['dragenter','dragover'].forEach(function(n){z.addEventListener(n,function(e){e.preventDefault();z.classList.add('drag')})});['dragleave','drop'].forEach(function(n){z.addEventListener(n,function(e){e.preventDefault();z.classList.remove('drag')})});z.addEventListener('drop',function(e){var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];take(f)})}}
     bindUpl('f_img','img',1280,0.8);bindUpl('f_fly','fly',1600,0.85);
     s.querySelectorAll('[data-rm]').forEach(function(x){x.onclick=function(){form[x.dataset.rm]='';save();renderForm()}});
-    var sd=$('#send');if(sd)sd.onclick=function(){save();if(!need(['f_org','f_mail','f_tel']))return;if(!/^\S+@\S+\.\S+$/.test(form.mail)){toast('Bitte eine gültige E-Mail angeben.');setTimeout(function(){toast('')},3500);return}if(form.pack==='free'&&!PROMO){form.link='';form.until=''}sd.disabled=true;sd.textContent='Wird gesendet …';post('submit',{title:form.title,date:form.date,until:form.until||'',time:form.time,tend:form.tend||'',place:form.place,town:form.town,cat:form.cat,desc:form.desc,price:pFmt(form.price),link:form.link,org:form.org,credit:form.credit||'',mail:form.mail,tel:form.tel,pack:form.pack,img:form.img||'',flyer:form.fly||''}).then(function(){step=5;renderForm()}).catch(function(er){sd.disabled=false;sd.textContent='Einreichen';toast(er.message);setTimeout(function(){toast('')},4000)})};
+    if(C.ts&&step===4){var tb=$('#tsBox');if(tb){var go=function(){try{window.turnstile.render('#tsBox',{sitekey:C.ts,callback:function(t){TS=t},'expired-callback':function(){TS=''}})}catch(x){}};if(window.turnstile)go();else{var sc=document.createElement('script');sc.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';sc.async=true;sc.onload=go;document.head.appendChild(sc)}}}
+    var sd=$('#send');if(sd)sd.onclick=function(){save();if(C.ts&&!TS){toast('Bitte kurz die Sicherheitsprüfung abwarten.');setTimeout(function(){toast('')},3000);return}if(!need(['f_org','f_mail','f_tel']))return;if(!/^\S+@\S+\.\S+$/.test(form.mail)){toast('Bitte eine gültige E-Mail angeben.');setTimeout(function(){toast('')},3500);return}if(form.pack==='free'&&!PROMO){form.link='';form.until=''}sd.disabled=true;sd.textContent='Wird gesendet …';post('submit',{title:form.title,date:form.date,until:form.until||'',time:form.time,tend:form.tend||'',place:form.place,town:form.town,cat:form.cat,desc:form.desc,price:pFmt(form.price),link:form.link,org:form.org,credit:form.credit||'',mail:form.mail,tel:form.tel,pack:form.pack,img:form.img||'',flyer:form.fly||'',el:Math.round((Date.now()-T0)/1000),cf:TS}).then(function(j){form.live=!!(j&&j.live);step=5;renderForm()}).catch(function(er){sd.disabled=false;sd.textContent='Einreichen';toast(er.message);setTimeout(function(){toast('')},4000)})};
     s.querySelectorAll('[data-tp]').forEach(function(b){b.onclick=function(){tpOpen(b.dataset.tp)}});
     s.querySelectorAll('[data-dp]').forEach(function(b){b.onclick=function(){dpOpen(b.dataset.dp)}});
     s.querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){save();form.time=b.dataset.t;renderForm()}});

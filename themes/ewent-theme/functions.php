@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWENT_THEME_VERSION', '0.7.53' );
+define( 'EWENT_THEME_VERSION', '0.7.54' );
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -36,6 +36,7 @@ function ewent_theme_data() {
 			'blink' => (string) get_option( 'ewent_banner_link', '' ),
 			'wk'   => ewent_picks(),
 			'top'  => ewent_top_titles(),
+			'ts'   => ( function_exists( 'ewent_turnstile_on' ) && ewent_turnstile_on() ) ? EWENT_TURNSTILE_SITE : '',
 		),
 		'events' => $events,
 	);
